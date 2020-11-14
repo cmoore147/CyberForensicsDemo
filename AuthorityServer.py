@@ -2,6 +2,14 @@
 from RSA import  generate_keypair,encrypt,decrypt
 
 
+def generateAndSendKeys(p,q,ServerInfo,theSocket):
+
+    publicKey, privateKey = generate_keypair(p,q)
+
+    message = message = ('Server_pubK: %d' % (publicKey))
+    theSocket.sendto()
+
+
 def checkMsg(msg):
     h1k = ""
     h2k = ""
@@ -14,11 +22,13 @@ def checkMsg(msg):
         return h2k, mode
 
     if msg.find('H1k') == 0:
-        print("\n~~~~ Received key ~~~~")
+        #print("\n~~~~ Received key ~~~~")
         h1k = processKey(msg)
-        print("\nHandler1 key = %s", h1k)
+        #print("\nHandler1 key = %s", h1k)
         mode = 1
         return h1k, mode
+        # append the h1k value to the key outside this function since this doesn't
+        # handle the delivery of mesgs
 
     if msg.find('data') == 0:
         print("\n~~~~ Received Data ~~~~~")
@@ -35,10 +45,12 @@ def processData(data):
 
 def processKey(key):
     msg = key.split()  # splits by the spaces and places it into an array
-    public_key_e = int(msg[1])
-    public_key_n = int(msg[2])
-    pk = (public_key_e, public_key_n)
-    return pk
+    key_e = int(msg[1]) # encrypted char
+    key_decrypt = decrypt(pk,int(key_e)) #decrypted char
+    return key_decrypt
+
+def formKey(aesKeyChar,keyFinal):
+    return keyFinal.append(aesKeyChar)
 #
 #
 #

@@ -9,33 +9,54 @@ menu = "========Menu=========\n" \
        "= 0) Handle Data    =\n" \
        "= 1) Send keys+Exit =\n" \
        "=====================\n"
-def inputHandler(handler,data,SocketData):
+
+'''
+Returns an array of encryped chars  that make up the AES key
+'''
+def encryptAESkey(aesKey):
+    key = str(aesKey)
+    key_encoded = []
+    for i in key:
+        etext = str(encrypt(p,i))
+        key_encoded.append(etext)
+
+    return key_encoded
+
+def inputController(handler,data,SocketData,theSocket):
     print(menu)
     command = input(">> ")
     command.join('\n')
 
     if command == 0:  # handle data
+
         if data[0:10] == "Unhandled":
             data = processPlainText(data)
             excryptedData = handler.__encryptAndHashReceivedData__(data)
             excryptedData += "0"
             newSeqNum = handler.__removeSequenceNumber__(encryptTheData)
             newData = handler.__appendSequenceNumber__(newSeqNum, encryptTheData)
-            return newData
-        else:
+            theSocket.sendto(newData, (SERVER_IP, PORT_NUMBER))
+            return 0
+
+        else: #data has been handled before
             excryptedData = handler.__encryptAndHashReceivedData__(data)
             newSeqNum = handler.__removeSequenceNumber__(encryptTheData)
             newData = handler.__appendSequenceNumber__(newSeqNum, encryptTheData)
-            return newData
+            theSocket.sendto(newData, (SERVER_IP, PORT_NUMBER))
+            return 0
 
+    '''
+    # Encrypts AES with server pub key
+    '''
+    if command == 1:  # send key to authoritative Server and exit
+        ekey = encryptAESkey(handler.secretKey)
+        message = ('%s_AES %s' % (handler.Name, ekey[[0]]))
+        theSocket.sendto(message.encode(), SocketData)
 
-    if command == 1:  # send keys and exit
+        if input("\nPress enter to send:\n>>"): # WAIT FOR SERVER TO HANDLE 1ST MSG
+            for i in ekey[1:]:
+                theSocket.sendto(i.encode(), SocketData)
 
-        message = ('%s_Asym %d' % (handler.Name, HandlerX.PublicKey))
-        message2 = ('%s_AES %s' % (handler.Name, HandlerX.secretKey))
-
-        mySocket.sendto(message.encode(), SocketData)
-        mySocket.sendto(message2.encode(), SocketData)
 
         print("\n ~~~~ Exiting Handler ~~~~~")
         return -1
@@ -62,18 +83,17 @@ if __name__ == '__main__':
     p = 1297211
     q = 1297601
     key = generateAESkey()
-    pvK,pbK = generate_keypair(p,q)
-    HandlerX = Handler(key,pvK,pbK,"H1")
+    #pvK,pbK = generate_keypair(p,q)
+    HandlerX = Handler(key,"H1")
 
     '''
-    ############ User Operation ##########
+    ########### User Operation ##########
     '''
     while True:
-        mode = inputHandler(HandlerX,evidence(),socketData)
+        mode = inputController(HandlerX,evidence(),socketData)
 
-        if mode != -1:
-            data = mode
-            mySocket.sendto(data,(SERVER_IP,PORT_NUMBER))
+        if mode == -1:
+            sys.exit()
         # message_encoded = []
         # for i in message:
         #     Etext = str(encrypt(HandlerX.PrivateKey, i))
