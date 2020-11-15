@@ -2,6 +2,7 @@ import textwrap
 import random
 from aes import AES
 from hashFunction import digest_hash
+import binascii
 
 
 
@@ -34,8 +35,8 @@ def incrementSeqNum(seq):
     return seq + 1
 
 def processPlainText(plainText):
-    data = binascii.hexlify(evidence().encode())
-    return '0x' + data.decode()
+    data = binascii.hexlify(plainText.encode())
+    return data.decode()
 
 def generateAESkey():
     keys = [0x7134743677397A24432646294A404E63,
@@ -74,8 +75,8 @@ class Handler:
         #self.PublicKey = PublicKey
         self.Name = Name
 
-    def __encryptAndHashReceivedData__(self, plaintext):
-        plaintextStr = str(hex(plaintext))
+    def __encryptAndHashReceivedData__(self, plaintext,secretKey):
+        plaintextStr = plaintext#str(hex(plaintext))
         plaintextStr = plaintextStr[2:]
         listOfBlocks = textwrap.wrap(plaintextStr, 32)
         #print(listOfBlocks)
@@ -85,13 +86,12 @@ class Handler:
         for x in listOfBlocks:
             #print(x)
             xHex = int(x, 16)
-            encryptedData = encrypt_data(xHex, key)
-            print("Encrypted data: " + str(hex(encryptedData)))
+            encryptedData = encrypt_data(xHex, secretKey)
+            #print("Encrypted data: " + str(hex(encryptedData)))
             tempStr = str(hex(encryptedData))
             tempStr = tempStr[2:]
             encryptedString += tempStr
 
-        print(encryptedString)
         encryptedInt = int(encryptedString, 16)
         encryptedIntWithHash = calculateAndAppendHash(encryptedInt)
         encryptedStringWithHash = str(encryptedIntWithHash)

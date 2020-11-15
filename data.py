@@ -9,6 +9,7 @@ def evidence():
 
 
 if __name__ == '__main__':
+    '''
     p = 1297211
     q = 1297601
     p,v = generate_keypair(p,q)
@@ -30,4 +31,11 @@ if __name__ == '__main__':
 
     # send first message with header so server know its a key
     # after it knows this it will handled the rest accordingly
+    '''
+    x = input("type")
+    x.join('\n')
+    if x == '':
+        print("good")
 
+    if x.find("yo") == 0:
+        print("bad")

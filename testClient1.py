@@ -1,65 +1,113 @@
 from socket import socket, AF_INET, SOCK_DGRAM, gethostname
-from RSA import generate_keypair, encrypt
+#from RSA import generate_keypair, encrypt,decrypt
 from data import evidence
 import sys
 from Handler import *
+from Crypto.PublicKey import RSA
 
 splash = "\n"
-menu = "========Menu=========\n" \
-       "= 0) Handle Data    =\n" \
-       "= 1) Send keys+Exit =\n" \
-       "=====================\n"
+menu = "|=======Menu========|\n" \
+       "| 0) Handle Data    |\n" \
+       "| 1) Send keys+Exit |\n" \
+       "|===================|\n"
+
+'''
+# Handles the msg that the handler will recieve
+# - messages are either from server or client
+# - input must be decoded into a string
+# - returns either key or data
+'''
+def checkMsg(msg):
+    msgArray = msg.split()
+
+    if msg[0]  == "[Server]":
+        print("\n ~~~~~ Msg from %s ~~~~",msg[0])
+        print("\n",msg)
+        serverPbKey = msg[2]
+
+        return serverPbKey, 0
+
+    if msg[0].find("Hander") == 0: # msg from a handler
+        print("\n ~~~~~ Msg from %s ~~~~~",msg[0])
+        print("\n",msg)
+
+        return data, 1
+
+    else:
+        print("\nError with handler name")
+        return -1
+
 
 '''
 Returns an array of encryped chars  that make up the AES key
 '''
-def encryptAESkey(aesKey):
-    key = str(aesKey)
-    key_encoded = []
-    for i in key:
-        etext = str(encrypt(p,i))
-        key_encoded.append(etext)
+def encryptAESkey(aesKey,pbk):
 
-    return key_encoded
+    #for i in key:
+    etext = encrypt(pbK,aesKey)
+    #key_encoded.append(etext)
 
-def inputController(handler,data,SocketData,theSocket):
+    return etext
+
+'''
+# handled the commands from the user
+'''
+def inputController(handler,data,ServerPubKey,pvk):
     print(menu)
-    command = input(">> ")
-    command.join('\n')
+    command = int(input(">> "))
+    print("\n")
 
     if command == 0:  # handle data
 
-        if data[0:10] == "Unhandled":
+        if data.find("Unhandled") == 0:
+            print('~~~~~~~Data~~~~~~~')
             data = processPlainText(data)
-            excryptedData = handler.__encryptAndHashReceivedData__(data)
-            excryptedData += "0"
-            newSeqNum = handler.__removeSequenceNumber__(encryptTheData)
-            newData = handler.__appendSequenceNumber__(newSeqNum, encryptTheData)
-            theSocket.sendto(newData, (SERVER_IP, PORT_NUMBER))
+            encryptedData = handler.__encryptAndHashReceivedData__(data,handler.secretKey)
+            print("Encrypted Data: %s" % encryptedData)
+            encryptedData += "0"
+            newSeqNum = handler.__removeSequenceNumber__(encryptedData)
+            print("SeqNum: %s" % newSeqNum)
+            newData = handler.__appendSequenceNumber__(newSeqNum, encryptedData)
+            message = ('[%s] Data: %s' % ( handler.Name,newData))
+            print("Message to Send: %s\n" % message)
+            #theSocket.sendto(message, (SERVER_IP, PORT_NUMBER))
             return 0
 
         else: #data has been handled before
-            excryptedData = handler.__encryptAndHashReceivedData__(data)
+            excryptedData = handler.__encryptAndHashReceivedData__(data,handler.secretKey)
             newSeqNum = handler.__removeSequenceNumber__(encryptTheData)
             newData = handler.__appendSequenceNumber__(newSeqNum, encryptTheData)
-            theSocket.sendto(newData, (SERVER_IP, PORT_NUMBER))
+            message = ('[%s] Data: %s' % (handler.Name, newData))
+            print("\n", message)
+            #theSocket.sendto(message, (SERVER_IP, PORT_NUMBER))
             return 0
 
     '''
     # Encrypts AES with server pub key
     '''
     if command == 1:  # send key to authoritative Server and exit
-        ekey = encryptAESkey(handler.secretKey)
-        message = ('%s_AES %s' % (handler.Name, ekey[[0]]))
-        theSocket.sendto(message.encode(), SocketData)
+        print("\n  ~~~~~~ My Secret Key ~~~~~~~  \n key: %s" % handler.secretKey)
+        print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        #ekey = encryptAESkey(handler.secretKey,ServerPubKey)
 
-        if input("\nPress enter to send:\n>>"): # WAIT FOR SERVER TO HANDLE 1ST MSG
-            for i in ekey[1:]:
-                theSocket.sendto(i.encode(), SocketData)
+        message = ('[%s] AES_Key: ' % (handler.Name))
+        print(int(handler.secretKey))
+        newkey = encrypt(ServerPubKey,handler.secretKey)
+        print(newkey)
+        print(decrypt(pvk,newkey))
+        enter = input("\n>> Press ENTER to send <<\n")
 
+        if enter == '':
+            #for i in ekey:
+            #    msg =(message + i)
+            #    #theSocket.sendto(msg.encode(), SocketData)
+            #    print(msg)
 
-        print("\n ~~~~ Exiting Handler ~~~~~")
+            print("\n ~~~~ Exiting Handler ~~~~~")
         return -1
+
+    print("\nInvalid input")
+    return 0
 
 
 
@@ -83,14 +131,22 @@ if __name__ == '__main__':
     p = 1297211
     q = 1297601
     key = generateAESkey()
-    #pvK,pbK = generate_keypair(p,q)
+
+    pvK,pbK =
+    print("pub ",pbK)
+    print("priv ",pvK)
     HandlerX = Handler(key,"H1")
 
     '''
     ########### User Operation ##########
+    
     '''
+    #evidence = 0x796F2062656E2073686F74206672616E6B0D0A
     while True:
-        mode = inputController(HandlerX,evidence(),socketData)
+        # each client will be recieving from a socket
+        # client 1 starts with data
+
+        mode = inputController(HandlerX,evidence(),pbK,pvK)
 
         if mode == -1:
             sys.exit()
