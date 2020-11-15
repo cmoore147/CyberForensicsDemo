@@ -1,9 +1,9 @@
 from socket import socket, AF_INET, SOCK_DGRAM, gethostname
-#from RSA import generate_keypair, encrypt,decrypt
+from RSA import generate_keypair, encrypt,decrypt
 from data import evidence
 import sys
 from Handler import *
-from Crypto.PublicKey import RSA
+#from Crypto.PublicKey import RSA
 
 splash = "\n"
 menu = "|=======Menu========|\n" \
@@ -49,6 +49,15 @@ def encryptAESkey(aesKey,pbk):
 
     return etext
 
+def decryptAESkey(ServerPubKey,EncryptedArray):
+    decryptedKey = ''
+    for t in EncryptedKeyArray:
+        temp = decrypt(pvk, t)
+        decryptedKey += temp
+        # print("temp",temp)
+
+    print("Decrypted: " + decryptedKey)
+
 '''
 # handled the commands from the user
 '''
@@ -92,17 +101,23 @@ def inputController(handler,data,ServerPubKey,pvk):
 
         message = ('[%s] AES_Key: ' % (handler.Name))
         print(int(handler.secretKey))
-        newkey = encrypt(ServerPubKey,handler.secretKey)
-        print(newkey)
-        print(decrypt(pvk,newkey))
+
+        EncryptedKeyArray = []
+        for i in str(handler.secretKey):
+            temp = encrypt(ServerPubKey,i)
+            #print(temp)
+            EncryptedKeyArray.append(temp)
+        print("Encrypted ",EncryptedKeyArray)
+
+
         enter = input("\n>> Press ENTER to send <<\n")
 
         if enter == '':
-            #for i in ekey:
-            #    msg =(message + i)
-            #    #theSocket.sendto(msg.encode(), SocketData)
-            #    print(msg)
-
+            for i in newkey:
+                msg =(message + i)
+                theSocket.sendto(msg.encode(), SocketData)
+                print(msg)
+            print()
             print("\n ~~~~ Exiting Handler ~~~~~")
         return -1
 
@@ -131,8 +146,12 @@ if __name__ == '__main__':
     p = 1297211
     q = 1297601
     key = generateAESkey()
-
-    pvK,pbK =
+		
+    #andom_generator = Random.new().read
+    #key = RSA.generate(1024, random_generator)
+    
+    #publickey = key.publickey
+    pbK,pvK = generate_keypair(p,q)
     print("pub ",pbK)
     print("priv ",pvK)
     HandlerX = Handler(key,"H1")
