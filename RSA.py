@@ -75,7 +75,7 @@ def generate_keypair(p, q):
     return ((e, n), (d, n))
 
 
-def encrypt(pk, plaintext):
+def encryptRSA(pk, plaintext):
     ###################################your code goes here#####################################
     # plaintext is a single character
     # cipher is a decimal number which is the encrypted version of plaintext
@@ -84,7 +84,7 @@ def encrypt(pk, plaintext):
     return cipher
 
 
-def decrypt(pk, ciphertext):
+def decryptRSA(pk, ciphertext):
     ###################################your code goes here#####################################
     # ciphertext is a single decimal number
     # the returned value is a character that is the decryption of ciphertext
