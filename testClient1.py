@@ -50,15 +50,6 @@ def encryptAESkey(aesKey,ServerPubkey):
 
     return EncryptedArray
 
-def decryptAESkey(ServerPubKey,EncryptedArray):
-    decryptedKey = ''
-    for t in EncryptedKeyArray:
-        temp = decrypt(pvk, t)
-        decryptedKey += temp
-        # print("temp",temp)
-
-    print("Decrypted: " + decryptedKey)
-
 '''
 # handled the commands from the user
 '''
@@ -145,6 +136,8 @@ if __name__ == '__main__':
     while True:
         # each client will be recieving from a socket
         # client 1 starts with data
+
+        # check socket for data first then take keyboard command
 
         mode = inputController(HandlerX,evidence(),pbK,pvK)
 

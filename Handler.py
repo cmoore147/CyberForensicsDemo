@@ -116,7 +116,7 @@ if __name__ == '__main__':
     key = 0x2b7e151628aed2a6abf7158809cf4f3c  # handlerPrivate AES key
     plaintext = 0x1111113243f6a8885a308d313198a2e03707343243f6a8885a308d313198a2e
     print(sizeof(plaintext))
-    HandlerX = Handler(key,1,2)
+    HandlerX = Handler(key,'H1')
     encryptTheData = Handler.__encryptAndHashReceivedData__(HandlerX, plaintext)
     encryptTheData = encryptTheData + "0"
     print(encryptTheData)
