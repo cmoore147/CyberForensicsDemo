@@ -5,8 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthorityServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AuthorityServer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testClient1.py" beforeDir="false" afterPath="$PROJECT_DIR$/testClient1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +40,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
-  <component name="RunManager" selected="Python.AuthorityServer">
+  <component name="RunManager" selected="Python.testClient1">
     <configuration name="AuthorityServer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CyberFinal" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -150,10 +148,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.AuthorityServer" />
-        <item itemvalue="Python.data" />
         <item itemvalue="Python.testClient1" />
         <item itemvalue="Python.Handler" />
+        <item itemvalue="Python.AuthorityServer" />
+        <item itemvalue="Python.data" />
         <item itemvalue="Python.testServer" />
       </list>
     </recent_temporary>
@@ -190,7 +188,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605551419668</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="AuthorityServer.py has limited functionality&#10;- can create pub and priv keys&#10;- partial decryption of aes keys&#10;&#10;still need to implement data handling">
+      <created>1605573853030</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1605573853030</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TodoView">
@@ -205,17 +210,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="EncryptAESkey works and will return byte array&#10;need to figure out socket sender to handle sending each&#10;element in this array to the server" />
     <MESSAGE value="TestClient1 commands work up to writing to the socket&#10;need to work on authoritative server now" />
-    <option name="LAST_COMMIT_MESSAGE" value="TestClient1 commands work up to writing to the socket&#10;need to work on authoritative server now" />
+    <MESSAGE value="AuthorityServer.py has limited functionality&#10;- can create pub and priv keys&#10;- partial decryption of aes keys&#10;&#10;still need to implement data handling" />
+    <option name="LAST_COMMIT_MESSAGE" value="AuthorityServer.py has limited functionality&#10;- can create pub and priv keys&#10;- partial decryption of aes keys&#10;&#10;still need to implement data handling" />
   </component>
   <component name="WindowStateProjectService">
     <state x="995" y="126" width="642" height="787" key="#testClient1" timestamp="1605408741058">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="995" y="126" width="642" height="787" key="#testClient1/0.27.1920.988@0.27.1920.988" timestamp="1605408741058" />
-    <state x="499" y="57" width="777" height="847" key="CommitChangelistDialog2" timestamp="1605551419501">
+    <state x="499" y="57" width="777" height="847" key="CommitChangelistDialog2" timestamp="1605573852709">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="499" y="57" width="777" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605551419501" />
+    <state x="499" y="57" width="777" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605573852709" />
     <state width="481" height="506" key="DebuggerActiveHint" timestamp="1605570802014">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -224,22 +230,22 @@
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="115" y="70" width="1536" height="820" key="DiffContextDialog/0.27.1920.988@0.27.1920.988" timestamp="1605551383300" />
-    <state width="1897" height="278" key="GridCell.Tab.0.bottom" timestamp="1605573099190">
+    <state width="1897" height="278" key="GridCell.Tab.0.bottom" timestamp="1605652002940">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="278" key="GridCell.Tab.0.bottom/0.27.1920.988@0.27.1920.988" timestamp="1605573099190" />
-    <state width="1897" height="278" key="GridCell.Tab.0.center" timestamp="1605573099189">
+    <state width="1897" height="278" key="GridCell.Tab.0.bottom/0.27.1920.988@0.27.1920.988" timestamp="1605652002940" />
+    <state width="1897" height="278" key="GridCell.Tab.0.center" timestamp="1605652002939">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="278" key="GridCell.Tab.0.center/0.27.1920.988@0.27.1920.988" timestamp="1605573099189" />
-    <state width="1897" height="278" key="GridCell.Tab.0.left" timestamp="1605573099188">
+    <state width="1897" height="278" key="GridCell.Tab.0.center/0.27.1920.988@0.27.1920.988" timestamp="1605652002939" />
+    <state width="1897" height="278" key="GridCell.Tab.0.left" timestamp="1605652002937">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="278" key="GridCell.Tab.0.left/0.27.1920.988@0.27.1920.988" timestamp="1605573099188" />
-    <state width="1897" height="278" key="GridCell.Tab.0.right" timestamp="1605573099190">
+    <state width="1897" height="278" key="GridCell.Tab.0.left/0.27.1920.988@0.27.1920.988" timestamp="1605652002937" />
+    <state width="1897" height="278" key="GridCell.Tab.0.right" timestamp="1605652002939">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="278" key="GridCell.Tab.0.right/0.27.1920.988@0.27.1920.988" timestamp="1605573099190" />
+    <state width="1897" height="278" key="GridCell.Tab.0.right/0.27.1920.988@0.27.1920.988" timestamp="1605652002939" />
     <state width="1897" height="317" key="GridCell.Tab.1.bottom" timestamp="1605570974550">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -260,18 +266,18 @@
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="449" y="155" key="SettingsEditor/0.27.1920.988@0.27.1920.988" timestamp="1605549523636" />
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605551430565">
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605573881015">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605551430565" />
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605573881015" />
     <state x="531" y="125" width="1289" height="790" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1605412530843">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="531" y="125" width="1289" height="790" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.27.1920.988@0.27.1920.988" timestamp="1605412530843" />
-    <state x="943" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605551391469">
+    <state x="943" y="440" width="454" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605652775681">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="943" y="440" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.27.1920.988@0.27.1920.988" timestamp="1605551391469" />
+    <state x="943" y="440" width="454" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.27.1920.988@0.27.1920.988" timestamp="1605652775681" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -283,7 +289,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/AuthorityServer.py</url>
-          <line>51</line>
+          <line>50</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
