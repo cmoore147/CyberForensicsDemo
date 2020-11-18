@@ -1,18 +1,13 @@
-
 from RSA import  generate_keypair,encryptRSA,decryptRSA
+import hashFunction
+from SocketFunctions import listen,send
 
-
-#def generateKeys(p,q,ServerInfo,theSocket):
-
-#    publicKey, privateKey = generate_keypair(p,q)
-
-#    message = ('[Server] Key: %s' % (publicKey))
-#    theSocket.sendto(message)
 menu = "\n|=======Menu==========|\n" \
        "| 0) Send Keys        |\n" \
        "| 1) Process Evidence |\n" \
        "| 2) Listen for Data  |\n" \
        "|=====================|\n"
+portArray = [3000,4000,5000]
 
 '''
 # Checks the msgs that server recieves
@@ -21,17 +16,16 @@ menu = "\n|=======Menu==========|\n" \
 def checkMsg(msg,Server):
 
     MesgArray = msg.split()
-    #message structure: " [Sender] Type : payload "
+    #message structure: " [Sender] Type: payload Type2: payload"
     #print('Incoming Msg:"%s"' % msg)
-    if MesgArray[1] == 'AES_Key':
+    if MesgArray[1] == 'AES_Key:':
         print("\n~~~~ Received key ~~~~")
-
-        keyChar = decryptRSA(Server.PrivateKey, int(MesgArray[2]))
-        formKey(keyChar, MesgArray[0], HandlerKeyArray)
+        handlerKey = decryptHandlerKey(MesgArray[2],Server)
+        storeKey(handlerKey, MesgArray[0], Server, MesgArray[4])
         print('\n%s AES_key = %s' % (MesgArray[0], keyChar))
         return 1
 
-    if MesgArray[1] == "Data":
+    if MesgArray[1] == "Data:":
         print("\n~~~~ Received Evidence ~~~~~")
         print(msg)
         Server.Evidence = MesgArray[2]
@@ -40,24 +34,22 @@ def checkMsg(msg,Server):
     print("Error in Message Type")
     return -1
 
-def inputController(data,p,q,Server):
+def inputController(Server):
     print(menu)
     command = input(">> ")
     command.join('\n')
 
     if command == '0':
         print("\n~~~~~~ My Keys ~~~~~~~")
-        privKey, pubKey = generate_keypair(p,q)
-        print('Private: %s'% (privKey,))
-        print('Public: %s'% (pubKey,))
-        Server.PrivateKey = privKey
-        Server.PublicKey = pubKey
+
         return 0
 
     if command == '1':
         print("\n~~~~~~~ Extracting Data ~~~~~~~~~")
+        seqNum = 1 #temp
         while seqNum > 0:
             EvidenceElements = processData(Server.Evidence)
+            seqNum = EvidenceElements[2]
             if not checkHash(EvidenceElements[0],EvidenceElements[1]):
                 #handlerX invalidated evidence
                 return 1
@@ -80,17 +72,29 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     Server.Evidence = decrypted
     return 0
 
+def decryptHandlerKey(eKey,Server):
+    ekeyArray = eKey.split(',')
+    key = ''
+    print(Server.PrivateKey)
+    print(type(ekeyArray[0]))
+    for char in ekeyArray:
+        print("char=",char)
+        key += decryptRSA(Server.PrivateKey, int(char))
+    print("key = ",key)
+    return key
 
 def processData(data):
     seqNum = data[len(data)-1]
-    givenHash = data[len(data)-4:len(data)-1] # check how long hash is
+    givenHash = data[len(data)-40:len(data)-1] # check how long hash is
     data = data[:len(data)-4] #check how long data is
     return data,givenHash,seqNum
 
 def checkHash(data,hash):
-    checkH = data
+    checkH = hashFunction.digest_hash(data)
+    checkH = str(hex(int.from_bytes(hashValue,"big")))
+    hash = hex(str())
     print('CheckHash: %s\n'
-          'Given Hash: %s' %checkH,hash)
+          'Given Hash: %s' % (checkH,hash))
 
     if checkH == data:
         print(">>Hash valid<<")
@@ -105,14 +109,14 @@ def checkHash(data,hash):
 - intialized handler keys 
 - appends incoming decrepyted chars to partially formed keys
 '''
-def formKey(aesKeyChar,handlerName,Server):
-    if handlerName in Server.KeyArray:
-        #append next char to the key
-        Server.KeyArray[handlerName] += aesKeyChar
-    else:
-        # base case when there is no partial key in the dictionary
-        KeyArray[handlerName] = aesKeyChar
-    print("Server Key library: ",KeyArray)
+def storeKey(aesKeyChar,handlerName,Server,handlerSeqNum):
+    Server.HandlerKeys[handlerName] = aesKeyChar
+    Server.HandlerKeys[handlerSeqNum] = handlerName
+    print("Server Key library: ",Server.HandlerKeys)
+
+
+def packageKey(serverKey):
+    return str(ServerX.PublicKey[0]) + ',' + str(ServerX.PublicKey[1])
 
 class Server():
     def __init__(self,PublicKey,PrivateKey,Evidence,HandlerKeys):
@@ -122,43 +126,32 @@ class Server():
         self.HandlerKeys = HandlerKeys
 
 if __name__ == '__main__':
-    key = 0x2b7e151628aed2a6abf7158809cf4f3c
+    #key = 0x2b7e151628aed2a6abf7158809cf4f3c
     data = 0x1111113243f6a8885a308d313198a2e03707343243f6a8885a308d313198a2e
-    #extract msg components
-    #   - handler who sent it
-    #   - hash value
-    #   - seq number
-    #getData(plaintext)
-    #calculate hash
-    #   - get hash from msg
-    #   - compare with check
-    #
-    # Decrypt data with handler Key
-    # newMsg = decrypted data
-    #
-    #extract msg components etc...
+    """
+    ############# Server Setup ################
+    """
     p = 7
     q = 11
+    privKey, pubKey = generate_keypair(p, q)
+    print('Private: %s' % (privKey,))
+    print('Public: %s' % (pubKey,))
+    serverPort = 5000
+    ServerX = Server(pubKey,privKey, data, {})  # temp values for keys 0 and 0 and evidence
 
-
-    #key = handlerName
-    #paylod = Key
-    ServerX = Server(0,0,"",{}) #temp values for keys 0 and 0 and evidence
     while True:
 
-        mode = inputController(data,p,q,ServerX)
+        mode = inputController(ServerX)
 
         if mode == 0:
             # sending key
-            try:
-                socketSendingFunction(ServerX.PublicKey,lsitport)
-                #sending function will write to each handlers Ports
-                #Function input:
-                    #-msg
-                    #-port list
-                # returns after sent each message and socket is closed
-            except:
-                print("Error sending Keys")
+            for x in portArray:
+                keyString = packageKey(ServerX.PublicKey)
+                msg = '[Server] PublicKey: %s' % keyString
+                try:
+                    send(x,msg)
+                except:
+                    print("[Error] Sending Keys to Port %s" % x)
 
         if mode == 1:
             # inputController Calls data processing functions
@@ -172,24 +165,16 @@ if __name__ == '__main__':
                 sys.exit()
             # extracting data
 
-        if mode[1] == 2:
+        if mode == 2:
             #--------------------
-            # listening for msg
-            # listening on socket function right here
-            # msg = socketList()
-            # listening function is in continuous loop
-            # inputs:
-                #- ports
-                #-flag (1 to close socket, 0 leave open)
+            msg = listen(5000)
             #----------------------
-            #msg = "[Handler1] AES_Key 34050201030"
-            msg = "[handler1] Data "+ str(data)
+            #msg = "[Handler1] AES_Key 34050201030 SeqNum: 1"
+            #msg = "[handler1] Data "+ str(data)
             msgType = checkMsg(msg,ServerX)
 
             if msgType == 1:
-                print("Forming Key....")
-                pass
+                print("~~~ Updated HandlerKey Library ~~~")
             if msgType == 0:
                 print("~~~~~ Recieved Evidence ~~~~~")
                 enter = input(">> Press Enter to Stop listening <<")
-                flag = 1

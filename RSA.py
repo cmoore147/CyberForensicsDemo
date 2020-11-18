@@ -90,4 +90,4 @@ def decryptRSA(pk, ciphertext):
     # the returned value is a character that is the decryption of ciphertext
     plain = chr(pow(ciphertext, pk[0], pk[1]))  # decypted letter
     #return plain
-    return ''.join(plain)
+    return plain

@@ -3,38 +3,48 @@ from RSA import generate_keypair, encryptRSA,decryptRSA
 from data import evidence
 import sys
 from Handler import *
+from SocketFunctions import listen, send
 #from Crypto.PublicKey import RSA
 
 splash = "\n"
 menu = "|=======Menu========|\n" \
        "| 0) Handle Data    |\n" \
        "| 1) Send keys+Exit |\n" \
+       "| 2) listen for msg |\n" \
        "|===================|\n"
+
+portlist = "\n|======Ports======|\n"\
+           "| Handler2) 3000  |\n"\
+           "| Handler3) 4000  |\n"\
+           "| Server)   5000  |\n"\
+           "|=================|"
+portArray = [5000,4000,3000]
 
 '''
 # Handles the msg that the handler will recieve
-# - messages are either from server or client
-# - input must be decoded into a string
-# - returns either key or data
+# - messages are either from server or handler
+# - returns int corresponding to msg type
 '''
-def checkMsg(msg):
+def checkMsg(msg,handler):
     msgArray = msg.split()
+    #msgformat: "[Sender] type: Payload"
+    if msgArray[1]  == 'PublicKey:':
+        print("\n ~~~~~ Msg from %s ~~~~" % msgArray[0])
+        print(msg)
+        serverPbKey = msgArray[2].split()
+        handler.ServerPubkey = serverPbKey
 
-    if msg[0]  == "[Server]":
-        print("\n ~~~~~ Msg from %s ~~~~",msg[0])
+        return 0
+
+    elif msgArray[1]=='Data:': # msg from a handler
+        print("\n ~~~~~ Msg from %s ~~~~~" % msgArray[0])
         print("\n",msg)
-        serverPbKey = msg[2]
+        handler.Evidence = msgArray[2] #string
 
-        return serverPbKey, 0
-
-    if msg[0].find("Hander") == 0: # msg from a handler
-        print("\n ~~~~~ Msg from %s ~~~~~",msg[0])
-        print("\n",msg)
-
-        return data, 1
+        return 1
 
     else:
-        print("\nError with handler name")
+        print("\nError with Msg format")
         return -1
 
 
@@ -42,31 +52,32 @@ def checkMsg(msg):
 Returns an array of encryped chars  that make up the AES key
 '''
 def encryptAESkey(aesKey,ServerPubkey):
-    EncryptedArray = []
-
+    EncryptedKeyString = ''
+    #EncrypedKeyArray = []
     for i in str(aesKey):
-        temp = encryptRSA(ServerPubkey,i)
-        EncryptedArray.append(temp)
-
-    return EncryptedArray
+        EncryptedKeyString += str(encryptRSA(ServerPubkey,i))
+        #EncryptedArray.append(temp)
+        EncryptedKeyString+=','
+    return EncryptedKeyString
 
 '''
 # handled the commands from the user
 '''
-def inputController(handler,data,ServerPubKey,pvk):
+def inputController(handler):
     print(menu)
     command = int(input(">> "))
     print("\n")
 
     if command == 0:  # handle data
 
-        if data.find("Unhandled") == 0:
+        if handler.Evidence.find("Unhandled") == 0:
             print('~~~~~~~Data~~~~~~~')
-            data = processPlainText(data)
+            data = processPlainText(handler.Evidence)
             encryptedData = handler.__encryptAndHashReceivedData__(data,handler.secretKey)
             print("Encrypted Data: %s" % encryptedData)
             encryptedData += "0"
             newSeqNum = handler.__removeSequenceNumber__(encryptedData)
+            handler.seqNum = newSeqNum
             print("SeqNum: %s" % newSeqNum)
             newData = handler.__appendSequenceNumber__(newSeqNum, encryptedData)
             message = ('[%s] Data: %s' % ( handler.Name,newData))
@@ -74,9 +85,11 @@ def inputController(handler,data,ServerPubKey,pvk):
             return message, 0
 
         else: #data has been handled before
-            excryptedData = handler.__encryptAndHashReceivedData__(data,handler.secretKey)
+            excryptedData = handler.__encryptAndHashReceivedData__(handler.Evidence,
+                                                                   handler.secretKey)
             newSeqNum = handler.__removeSequenceNumber__(encryptTheData)
-            newData = handler.__appendSequenceNumber__(newSeqNum, encryptTheData)
+            newData = handler.__appendSequenceNumber__(newSeqNum,
+                                                       encryptTheData)
             message = ('[%s] Data: %s' % (handler.Name, newData))
             print("Message to Send: %s\n" % message)
             #theSocket.sendto(message, (SERVER_IP, PORT_NUMBER))
@@ -88,13 +101,18 @@ def inputController(handler,data,ServerPubKey,pvk):
     if command == 1:  # send key to authoritative Server and exit
         print("\n  ~~~~~~ My Secret Key ~~~~~~~  \n key: %s" % handler.secretKey)
         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        EncryptedKeyArray = encryptAESkey(handler.secretKey,ServerPubKey)
+        EncryptedKeyString = encryptAESkey(handler.secretKey,ServerPubKey)
+        return EncryptedKeyString, 1
 
-        print("Encrypted Array: ",EncryptedKeyArray)
-        return EncryptedKeyArray, 1
+    if command == 2:
+        while 1:
+            print(portlist)
+            print(">> Choose a port <<")
+            port = int(input(">>"))
+            return port,2
 
-    print("\nInvalid input")
-    return 0
+    print("[Error] Invalid command")
+    return -1
 
 
 
@@ -103,81 +121,65 @@ if __name__ == '__main__':
 
     print(splash)
     '''
-    ########## Socket Setup #########
-    '''
-    SERVER_IP = gethostname()
-    PORT_NUMBER = 5000
-    socketData = (SERVER_IP,PORT_NUMBER)
-    SIZE = 1024
-    print("Test client sending packets to IP {0}, via port {1}\n".format(SERVER_IP, PORT_NUMBER))
-    mySocket = socket(AF_INET, SOCK_DGRAM)
-
-    '''
     ########### Handler Setup ##########
     '''
-    p = 1297211
-    q = 1297601
+    p = 1297211 # for testing
+    q = 1297601 # for testing
     key = generateAESkey()
-		
-    #andom_generator = Random.new().read
-    #key = RSA.generate(1024, random_generator)
-    
-    #publickey = key.publickey
-    pbK,pvK = generate_keypair(p,q)
-    print("pub ",pbK)
-    print("priv ",pvK)
-    HandlerX = Handler(key,"H1")
-
+    ServerPubKey,pvk = generate_keypair(p,q) # for testing
+    handlerName = str(input("Whats ur name?"))
+    HandlerX = Handler(key,handlerName,0,"",0)
+    HandlerX.Evidence = evidence()
+    serverPort = 5000
     '''
     ########### User Operation ##########
-    
     '''
-    #evidence = 0x796F2062656E2073686F74206672616E6B0D0A
     while True:
-        # each client will be recieving from a socket
-        # client 1 starts with data
-
-        # check socket for data first then take keyboard command
-
-        mode = inputController(HandlerX,evidence(),pbK,pvK)
+        mode = inputController(HandlerX)
 
         """
-        # Hanlder processes data and gets ready to pass data along
+        ######## process data and send ########
         """
         if mode[1] == 0:
-            enter = input("\n>> Press ENTER to send <<\n")
-            if enter == '':
-                message = mode[0]
+            print(portlist)
+            port = int(input("\n>> Chose a Port <<\n"))
+            if port != '':
+                msg = mode[0]
                 print("Sending Message")
-                #send data to handler or server
+                try:
+                    send(port,msg)
+                except:
+                    print("Error writting to socket")
 
+                #print("Msg attempting to send", msg)
         '''
-        # RSA encrpytion of AES encrpts by each char in key
-        # each encrypted char is sent over socket
+        ######### Encrypt Private key and Send to Server ########
         '''
         if mode[1] == 1:
-            enter = input("\n>> Press ENTER to send <<\n")
+            enter = input("\n>> Press Enter to Send <<\n")
             message = ('[%s] AES_Key: ' % (HandlerX.Name))
-            EncrypedKeyArray = mode[0]
+            EncrypedKeyString = mode[0]
             if enter == '':
-                for i in EncrypedKeyArray:
-                    msg = (message + str(i))
+                msg = (message + EncrypedKeyString)
+                msg += ' SeqNum: ' + str(HandlerX.seqNum)
+                try:
+                    send(serverPort,msg)
+                except:
+                    print("Error writting to socket")
 
-                    try:
-                        theSocket.sendto(msg.encode(), SocketData)
-                    except:
-                        print("Error writting to socket")
+        """
+        # Handler is listening on port for message
+        """
+        if mode[1] == 2:
+            print("")
+            # print(portlist)
+            # port = input("\n>> Choose a port<<\n")
+            port = mode[0]
+            msg = listen(port)
+            msgType = checkMsg(msg,HandlerX)
+            if msgType == 0:
+                print("~~~~ Received Server Key ~~~~~")
+            if msgType == 1:
+                print("~~~~ Received Evidence ~~~~~~~")
 
-                    print("Msg attempting to send",msg)
-
-                print()
-                print("\n ~~~~ Exiting Handler ~~~~~")
-                sys.exit()
-        # message_encoded = []
-        # for i in message:
-        #     Etext = str(encrypt(HandlerX.PrivateKey, i))
-        #     message_encoded.append(Etext)
-        #     # ----do we need to include end of transission in asci???-------
-        #
-        # [mySocket.sendto(code.encode(), (SERVER_IP, PORT_NUMBER)) for code in message_encoded]
 

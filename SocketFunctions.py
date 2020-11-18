@@ -1,38 +1,35 @@
-#!/usr/bin/env python3
-
-import socket
-
-HOST = '127.0.0.1'  # (localhost)
-PORT = 1023        # Port to listen on (non-privileged are > 1023)
-PORTc = 65432      #Port used to send stuff on
-message = 'Encrypted';
+import sys
+from socket import socket, AF_INET, SOCK_DGRAM, gethostname
+from RSA import generate_keypair,encryptRSA,decryptRSA
 
 
+def send(PORT_NUMBER, data):
+    #Client side
+    SERVER_IP = gethostname()
 
-#Function to
-def client(HOST, PORT, send):
-    #Code for sending functionality
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as m:
-        m.connect((HOST, PORT))
-        m.sendall(send)
-        #data2 = m.recv(1024)
-        m.close()
-        return
-#Function for setting up server to listen on
-def server(HOST, PORT):
-    while True:
-        #Code for Server
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind((HOST, PORT))
-            s.listen()
-            conn, addr = s.accept()
-            with conn:
-                print('Connected by', addr)
-                while True:
-                    data = conn.recv(1024)
-                    if not data:
-                        break
-                    #conn.sendall(b"Hi")
-                    print('recieved from client', repr(data))
+    SIZE = 1024
+    print ("Test client sending packets to IP {0}, via port {1}\n".format(SERVER_IP, PORT_NUMBER))
+
+    mySocket = socket( AF_INET, SOCK_DGRAM ) #Connection  Setup
+
+    mySocket.sendto(data.encode(),(SERVER_IP,PORT_NUMBER))
     return
 
+
+
+
+def listen(PORT_NUMBER):
+    #Server side socket
+    hostName = gethostname()
+    SIZE = 1024
+
+
+    mySocket = socket( AF_INET, SOCK_DGRAM ) #Creates socket
+    mySocket.bind( (hostName, PORT_NUMBER) ) #Binds socket
+
+    print ("Test server listening on port {0}\n".format(PORT_NUMBER)) #States which port server is listening on
+    #client_public_key=''
+
+    (data,addr) = mySocket.recvfrom(SIZE)
+    data = data.decode()
+    return data

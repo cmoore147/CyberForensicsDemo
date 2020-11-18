@@ -69,11 +69,12 @@ def generateAESkey():
     return secretKey
 
 class Handler:
-    def __init__(self, secretKey,Name):
+    def __init__(self, secretKey,Name,seqNum,Evidence,ServerPubkey):
         self.secretKey = secretKey
-        #self.PrivateKey = PrivateKey
-        #self.PublicKey = PublicKey
         self.Name = Name
+        self.seqNum = seqNum
+        self.Evidence = Evidence
+        self.ServerPubkey = ServerPubkey
 
     def __encryptAndHashReceivedData__(self, plaintext,secretKey):
         plaintextStr = plaintext#str(hex(plaintext))
