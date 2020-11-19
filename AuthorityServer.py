@@ -22,7 +22,7 @@ def checkMsg(msg,Server):
         print("\n~~~~ Received key ~~~~")
         handlerKey = decryptHandlerKey(MesgArray[2],Server)
         storeKey(handlerKey, MesgArray[0], Server, MesgArray[4])
-        print('\n%s AES_key = %s' % (MesgArray[0], keyChar))
+        #print('\n%s AES_key = %s' % (MesgArray[0], handlerKey))
         return 1
 
     if MesgArray[1] == "Data:":
@@ -75,12 +75,17 @@ def DecryptData(cipherText,HandlerAESKey,Server):
 def decryptHandlerKey(eKey,Server):
     ekeyArray = eKey.split(',')
     key = ''
-    print(Server.PrivateKey)
-    print(type(ekeyArray[0]))
-    for char in ekeyArray:
-        print("char=",char)
-        key += decryptRSA(Server.PrivateKey, int(char))
-    print("key = ",key)
+    print("Server Key: ",Server.PrivateKey)
+    print(ekeyArray)
+    for char in ekeyArray[:len(ekeyArray)-1]:
+        assert char == str , "char in ecrypted array in not a string"
+        print("char =",int(char))
+        temp = decryptRSA(Server.PrivateKey, int(char))
+        #assert temp == str
+        print("type of temp=",type(temp))
+        key.join(str(temp))
+        #print("Decrypted_Char= ",str(temp))
+    #print("key = ",key)
     return key
 
 def processData(data):
@@ -112,7 +117,7 @@ def checkHash(data,hash):
 def storeKey(aesKeyChar,handlerName,Server,handlerSeqNum):
     Server.HandlerKeys[handlerName] = aesKeyChar
     Server.HandlerKeys[handlerSeqNum] = handlerName
-    print("Server Key library: ",Server.HandlerKeys)
+    #print("Server Key library: ",Server.HandlerKeys)
 
 
 def packageKey(serverKey):
@@ -131,20 +136,17 @@ if __name__ == '__main__':
     """
     ############# Server Setup ################
     """
-    p = 7
-    q = 11
-    privKey, pubKey = generate_keypair(p, q)
+    q = 7
+    p = 31
+    pubKey, privKey = generate_keypair(p, q)
     print('Private: %s' % (privKey,))
     print('Public: %s' % (pubKey,))
     serverPort = 5000
     ServerX = Server(pubKey,privKey, data, {})  # temp values for keys 0 and 0 and evidence
 
     while True:
-
         mode = inputController(ServerX)
-
-        if mode == 0:
-            # sending key
+        if mode == 0: ######### SendingKey ##########
             for x in portArray:
                 keyString = packageKey(ServerX.PublicKey)
                 msg = '[Server] PublicKey: %s' % keyString

@@ -4,6 +4,7 @@ from data import evidence
 import sys
 from Handler import *
 from SocketFunctions import listen, send
+from AuthorityServer import decryptHandlerKey
 #from Crypto.PublicKey import RSA
 
 splash = "\n"
@@ -31,8 +32,11 @@ def checkMsg(msg,handler):
     if msgArray[1]  == 'PublicKey:':
         print("\n ~~~~~ Msg from %s ~~~~" % msgArray[0])
         print(msg)
-        serverPbKey = msgArray[2].split()
-        handler.ServerPubkey = serverPbKey
+        serverPbKey = msgArray[2].split(',')
+        print(serverPbKey)
+        e = int(serverPbKey[0])
+        n = int(serverPbKey[1])
+        handler.ServerPubkey = (e,n)
 
         return 0
 
@@ -54,8 +58,11 @@ Returns an array of encryped chars  that make up the AES key
 def encryptAESkey(aesKey,ServerPubkey):
     EncryptedKeyString = ''
     #EncrypedKeyArray = []
-    for i in str(aesKey):
-        EncryptedKeyString += str(encryptRSA(ServerPubkey,i))
+    for i in aesKey: # ases key is a string
+        assert i == str ,"Aes char is not a string"
+        temp = encryptRSA(ServerPubkey,i)
+        print("tempEncryptio=",temp)
+        EncryptedKeyString += str(temp) #encryption return int
         #EncryptedArray.append(temp)
         EncryptedKeyString+=','
     return EncryptedKeyString
@@ -102,7 +109,9 @@ def inputController(handler):
         print("\n  ~~~~~~ My Secret Key ~~~~~~~  \n key: %s" % handler.secretKey)
         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         EncryptedKeyString = encryptAESkey(handler.secretKey,ServerPubKey)
-        return EncryptedKeyString, 1
+        print(EncryptedKeyString)
+        message = ('[%s] AES_Key: %s' % (handler.Name, EncryptedKeyString))
+        return message, 1
 
     if command == 2:
         while 1:
@@ -125,9 +134,10 @@ if __name__ == '__main__':
     '''
     p = 1297211 # for testing
     q = 1297601 # for testing
-    key = generateAESkey()
+    key = str(hex(generateAESkey()))
     ServerPubKey,pvk = generate_keypair(p,q) # for testing
     handlerName = str(input("Whats ur name?"))
+    #print("handlerkey",str(hex(key)))
     HandlerX = Handler(key,handlerName,0,"",0)
     HandlerX.Evidence = evidence()
     serverPort = 5000
@@ -157,10 +167,10 @@ if __name__ == '__main__':
         '''
         if mode[1] == 1:
             enter = input("\n>> Press Enter to Send <<\n")
-            message = ('[%s] AES_Key: ' % (HandlerX.Name))
-            EncrypedKeyString = mode[0]
+            msg = mode[0]
+            print("Message: ", msg)
             if enter == '':
-                msg = (message + EncrypedKeyString)
+                #msg = (message + EncrypedKeyString)
                 msg += ' SeqNum: ' + str(HandlerX.seqNum)
                 try:
                     send(serverPort,msg)

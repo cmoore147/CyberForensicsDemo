@@ -23,12 +23,10 @@ def listen(PORT_NUMBER):
     hostName = gethostname()
     SIZE = 1024
 
-
     mySocket = socket( AF_INET, SOCK_DGRAM ) #Creates socket
     mySocket.bind( (hostName, PORT_NUMBER) ) #Binds socket
 
     print ("Test server listening on port {0}\n".format(PORT_NUMBER)) #States which port server is listening on
-    #client_public_key=''
 
     (data,addr) = mySocket.recvfrom(SIZE)
     data = data.decode()
