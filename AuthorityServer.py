@@ -53,10 +53,10 @@ def inputController(Server):
 
         while seqNum > 0:
             EvidenceElements = processData(Server.Evidence)
-            print("~[Evidence Elements]~\n"
+            print("   ~[Evidence Elements]~\n"
                   "Data: %s\n"
                   "Hash: %s\n"
-                  "SeqNum: %d\n" % (hex(EvidenceElements[0]),
+                  "SeqNum: %d" % (hex(EvidenceElements[0]),
                                     hex(EvidenceElements[1]),
                                     EvidenceElements[2])
                   )
@@ -69,7 +69,7 @@ def inputController(Server):
                 return 3
             seqNum = seqNum -1
             hName = Server.HandlerKeys[handlerKey]
-            i = input("#### %s Verified ####\n [ENTER]" % hName)
+            i = input("#### %s Verified ####[Press ENTER]\n\n" % hName)
         return 1
 
     if command == '2':
@@ -187,10 +187,10 @@ if __name__ == '__main__':
 
         if mode == 1:########## Processing evidence #########
             print("\n##################### Original Evidence #######################")
-            print("####                                                      ####")
-            print('####                  ',ServerX.Evidence,"                             ####")
-            print("####                                                      ####")
-            print("##############################################################")
+            print("####                                                             ")
+            print("####      '",ServerX.Evidence,"'")
+            print("####                                                             ")
+            print("#################################################################")
 
             c = input("\n\nTo Exit [PRESS ENTER]")
             sys.exit()
