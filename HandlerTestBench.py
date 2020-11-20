@@ -8,11 +8,11 @@ from AuthorityServer import decryptHandlerKey
 #from Crypto.PublicKey import RSA
 
 splash = "\n"
-menu = "|=======Menu========|\n" \
-       "| 0) Handle Data    |\n" \
-       "| 1) Send keys+Exit |\n" \
-       "| 2) listen for msg |\n" \
-       "|===================|\n"
+menu = "|====Command Window====|\n" \
+       "| 0) Handle Data       |\n" \
+       "| 1) Send Key_2_Server |\n" \
+       "| 2) Listen for msg    |\n" \
+       "|======================|\n"
 
 portlist = "\n|======Ports======|\n"\
            "| Handler2) 3000  |\n"\
@@ -31,9 +31,8 @@ def checkMsg(msg,handler):
     #msgformat: "[Sender] type: Payload"
     if msgArray[1]  == 'PublicKey:':
         print("\n ~~~~~ Msg from %s ~~~~" % msgArray[0])
-        print(msg)
+        print("Message: '%s' " % msg)
         serverPbKey = msgArray[2].split(',')
-        print(serverPbKey)
         e = int(serverPbKey[0])
         assert isinstance(e,int)
         n = int(serverPbKey[1])
@@ -56,10 +55,10 @@ def checkMsg(msg,handler):
 '''
 def inputController(handler):
     print(menu)
-    command = int(input(">> "))
+    command = input("[%s]>> " % handler.Name)
     print("\n")
 
-    if command == 0:  # handle data
+    if command == '0':  # handle data
 
         if handler.Evidence.find("Unhandled") == 0:
             print('~~~~~~~Handling Raw Evidence~~~~~~~')
@@ -103,7 +102,7 @@ def inputController(handler):
     '''
     # Encrypts AES with server pub key
     '''
-    if command == 1:  # send key to authoritative Server and exit
+    if command == '1':  # send key to authoritative Server and exit
         print("\n  ~~~~~~ My Secret Key ~~~~~~~  \n key: %s" % handler.secretKey)
         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         AesKey = str(hex(handler.secretKey))
@@ -112,7 +111,7 @@ def inputController(handler):
         message = ('[%s] AES_Key: %s' % (handler.Name, EncryptedKeyString))
         return message, 1
 
-    if command == 2:
+    if command == '2':
         while 1:
             print(portlist)
             print(">> Choose a port <<")
@@ -150,13 +149,11 @@ if __name__ == '__main__':
             port = int(input("\n>> Chose a Port <<\n"))
             if port != '':
                 msg = mode[0]
-                print("Sending Message")
+                print("Sending Message -->")
                 try:
-                    send(port,msg)
+                    send(port,msg,HandlerX.Name)
                 except:
                     print("Error writting to socket")
-
-                #print("Msg attempting to send", msg)
         '''
         ######### Encrypt Private key and Send to Server ########
         '''

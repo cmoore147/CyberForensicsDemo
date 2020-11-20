@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1d4664d-88de-4f1c-8924-3455dd4b141a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthorityServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AuthorityServer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SocketFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/SocketFunctions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testClient1.py" beforeDir="false" afterPath="$PROJECT_DIR$/testClient1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testClient1.py" beforeDir="false" afterPath="$PROJECT_DIR$/HandlerTestBench.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testServer.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +30,7 @@
     <setting file="file://$PROJECT_DIR$/SocketFunctions.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/AuthorityServer.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/RSA.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/testClient1.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/HandlerTestBench.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectId" id="1kJAwcERKAOTVKouB60XjkQHHBa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -117,7 +119,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testClient1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/HandlerTestBench.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -267,7 +269,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605854355012</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="FINALLYWORKKS !!!!!!!!! &#10;need to fix hex string decoder to print plaintext">
+      <created>1605887074959</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1605887074959</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TodoView">
@@ -294,10 +303,10 @@
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="995" y="126" width="642" height="787" key="#testClient1/0.27.1920.988@0.27.1920.988" timestamp="1605408741058" />
-    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605854354969">
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605887074801">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605854354968" />
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605887074801" />
     <state width="693" height="506" key="DebuggerActiveHint" timestamp="1605847165252">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -379,8 +388,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testClient1.py</url>
-          <line>154</line>
+          <url>file://$PROJECT_DIR$/HandlerTestBench.py</url>
+          <line>153</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

@@ -3,6 +3,7 @@ import random
 from aes import AES
 from hashFunction import digest_hash
 import binascii
+from RSA import encryptRSA
 
 
 def calculateAndAppendHash(data):

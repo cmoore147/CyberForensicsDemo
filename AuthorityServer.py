@@ -6,11 +6,11 @@ import binascii
 import textwrap
 import sys
 
-menu = "\n|=======Menu==========|\n" \
-       "| 0) Send Keys        |\n" \
-       "| 1) Process Evidence |\n" \
-       "| 2) Listen for Msg   |\n" \
-       "|=====================|\n"
+menu = "\n|====Command Window=====|\n" \
+       "| 0) Send Keys          |\n" \
+       "| 1) Process Evidence   |\n" \
+       "| 2) Listen for Msg     |\n" \
+       "|=======================|\n"
 portArray = [3000,4000,5000]
 
 '''
@@ -18,15 +18,14 @@ portArray = [3000,4000,5000]
 # - if it recieves data act on different return value
 '''
 def checkMsg(msg,Server):
-
     MesgArray = msg.split()
-    #message structure: " [Sender] Type: payload Type2: payload"
-    #print('Incoming Msg:"%s"' % msg)
+    ########### message structure: ############
+    # '[Sender] Type: payload Type2: payload' #
+
     if MesgArray[1] == 'AES_Key:':
         print("\n~~~~ Received key ~~~~")
         handlerKey = decryptHandlerKey(MesgArray[2],Server)
         storeKey(handlerKey, MesgArray[0], Server, MesgArray[4])
-        #print('\n%s AES_key = %s' % (MesgArray[0], handlerKey))
         return 1
 
     if MesgArray[1] == "Data:":
@@ -44,7 +43,7 @@ def inputController(Server):
     command.join('\n')
 
     if command == '0':
-        print("\n~~~~~~ My Keys ~~~~~~~")
+        print("\n~~~~~~ Sending Public Key ~~~~~~~")
 
         return 0
 
@@ -57,9 +56,10 @@ def inputController(Server):
             print("~[Evidence Elements]~\n"
                   "Data: %s\n"
                   "Hash: %s\n"
-                  "SeqNum: %s\n"(hex(EvidenceElements[0]),
-                                 hex(EvidenceElements[1]),
-                                 EvidenceElements[2]))
+                  "SeqNum: %d\n" % (hex(EvidenceElements[0]),
+                                    hex(EvidenceElements[1]),
+                                    EvidenceElements[2])
+                  )
 
             seqNum = EvidenceElements[2]
             if not checkHash(EvidenceElements[0],EvidenceElements[1]):
@@ -68,6 +68,7 @@ def inputController(Server):
             if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
                 return 3
             seqNum = seqNum -1
+            i = input("#### %s Chain Verified ####\n [ENTER]")
         return 1
 
     if command == '2':
@@ -86,13 +87,15 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     listOfBlocks = textwrap.wrap(stringOfCipherText,32)
 
     decryptedString = "0x"
+    i =0
     for x in listOfBlocks:
-        #print("each x= ",x)
+        #print("Decrypting Block %d = "%i,x)
         xHex = int(x,16)
         decryptedData = AES.decrypt(AESfunct, xHex)
         tempStr = str(hex(decryptedData))
         tempStr = tempStr[2:]
         decryptedString += tempStr
+        i+=1
 
     temp = binascii.unhexlify(((str('%00x' % int(decryptedString, 16)))))
     tempDecoded = str(temp,'utf-8')[:]
@@ -174,7 +177,7 @@ if __name__ == '__main__':
                 keyString = packageKey(ServerX.PublicKey)
                 msg = '[Server] PublicKey: %s' % keyString
                 try:
-                    send(x,msg)
+                    send(x,msg,ServerX.Name)
                 except:
                     print("[Error] Sending Keys to Port %s" % x)
 
@@ -193,7 +196,7 @@ if __name__ == '__main__':
 
         if mode == 2:
             #--------------------
-            msg = listen(5000)
+            msg = listen(5000,ServerX.Name)
             #----------------------
             #msg = "[Handler1] AES_Key 34050201030 SeqNum: 1"
             #msg = "[handler1] Data "+ str(data)

@@ -10,8 +10,7 @@ def send(PORT_NUMBER, data,name):
     mySocket = socket(AF_INET, SOCK_DGRAM)  # Connection  Setup
     mySocket.sendto(data.encode(), (SERVER_IP, PORT_NUMBER))
 
-    print ("[",Name,"]"," sending packets to IP {0}, via port {1}\n"
-                        "".format(SERVER_IP, PORT_NUMBER))
+    #print ("[",Name,"]"," sending packets to IP {0}, via port {1}\n".format(SERVER_IP, PORT_NUMBER))
     return
 
 
