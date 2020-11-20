@@ -68,8 +68,8 @@ def inputController(Server):
             if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
                 return 3
             seqNum = seqNum -1
-            handlerName = Server.HandlerKeys.fromKeys(handlerKey)
-            i = input("#### Chain Verified ####\n [ENTER]" % )
+            hName = Server.HandlerKeys[handlerKey]
+            i = input("#### %s Verified ####\n [ENTER]" % hName)
         return 1
 
     if command == '2':
@@ -142,7 +142,7 @@ def checkHash(hexData,givenHashHex):
 '''
 def storeKey(aesKey,handlerName,Server,handlerSeqNum):
     #print("[",handlerName,"]","aesKey=",aesKey)
-    Server.HandlerKeys[handlerName] = int(aesKey,16)
+    Server.HandlerKeys[int(aesKey,16)] = handlerName
     Server.HandlerKeys[int(handlerSeqNum)] = int(aesKey,16)
     print("Updated Handler Key Library: ",Server.HandlerKeys)
 
@@ -186,9 +186,13 @@ if __name__ == '__main__':
                     print("[Error] Sending Keys to Port %s" % x)
 
         if mode == 1:########## Processing evidence #########
-            print("###### Data is Verified #######")
-            print('PlainText Evidence: ',ServerX.Evidence)
-            c = input("To Exit [PRESS ENTER]")
+            print("\n##################### Data is Verified #######################")
+            print("####                                                      ####")
+            print('####       PlainText Evidence: ',ServerX.Evidence,"       ####")
+            print("####                                                      ####")
+            print("##############################################################")
+
+            c = input("\n\nTo Exit [PRESS ENTER]")
             sys.exit()
         if mode == 3:
             c = input("Reset and try again? [PRESS ENTER]")

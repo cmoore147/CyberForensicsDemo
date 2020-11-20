@@ -278,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605889502274</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Now it looks pretty">
+      <created>1605890441171</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1605890441171</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TodoView">
@@ -298,17 +305,18 @@
     <MESSAGE value="Comunication works throughout system &#10;&#10;there is an error with decoding the handler key &#10;--&gt;there is an empty element in the array of encrypted chars for some reason" />
     <MESSAGE value="fixed previous error&#10;new error with the server decoding the handler key&#10;has to do with data type of the encrypted key" />
     <MESSAGE value="FINALLYWORKKS !!!!!!!!! &#10;need to fix hex string decoder to print plaintext" />
-    <option name="LAST_COMMIT_MESSAGE" value="FINALLYWORKKS !!!!!!!!! &#10;need to fix hex string decoder to print plaintext" />
+    <MESSAGE value="Now it looks pretty" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now it looks pretty" />
   </component>
   <component name="WindowStateProjectService">
     <state x="995" y="126" width="642" height="787" key="#testClient1" timestamp="1605408741058">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="995" y="126" width="642" height="787" key="#testClient1/0.27.1920.988@0.27.1920.988" timestamp="1605408741058" />
-    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605889502089">
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605890441134">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605889502089" />
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605890441134" />
     <state width="693" height="506" key="DebuggerActiveHint" timestamp="1605847165252">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -369,10 +377,10 @@
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="449" y="155" key="SettingsEditor/0.27.1920.988@0.27.1920.988" timestamp="1605675856345" />
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605854360086">
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605890447695">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605854360086" />
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605890447694" />
     <state x="531" y="125" width="1289" height="790" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1605412530843">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
