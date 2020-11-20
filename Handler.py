@@ -58,7 +58,7 @@ class Handler:
 
     def __encryptAndHashReceivedData__(self, plaintext,secretKey):
         plaintextStr = plaintext#str(hex(plaintext))
-        plaintextStr = plaintextStr[2:]
+        #plaintextStr = plaintextStr
         listOfBlocks = textwrap.wrap(plaintextStr, 32)
         #print(listOfBlocks)
 

@@ -3,6 +3,7 @@ import hashFunction
 from SocketFunctions import listen,send
 from aes import AES
 import binascii
+import textwrap
 menu = "\n|=======Menu==========|\n" \
        "| 0) Send Keys        |\n" \
        "| 1) Process Evidence |\n" \
@@ -71,9 +72,22 @@ def inputController(Server):
 
 def DecryptData(cipherText,HandlerAESKey,Server):
     AESfunct = AES(HandlerAESKey)
-    decrypted = AES.decrypt(AESfunct, cipherText)
+
+    stringOfCipherText = str(hex(cipherText))
+    listOfBlocks = textwrap.wrap(stringOfCipherText)
+
+    decryptedString = "0x"
+    for x in listOfBlocks:
+        xHex = int(x,16)
+        decryptedData = AES.decrypt(AESfunct, xHex)
+        tempStr = str(hex(decryptedData))
+        tempStr = tempStr[2:]
+        decryptedString += tempStr
+
+    decrypted = decryptedString
+    #decrypted = AES.decrypt(AESfunct, cipherText)
     #print("hex decrypted string",hex(decrypted))
-    print("hex sting of Evidence",hex(decrypted))
+    print("hex sting of Evidence",hex(int(decrypted,16)))
     Server.Evidence = decrypted
     #temp = int(decrypted,2)
     print(binascii.unhexlify(((str('0%x' % Server.Evidence)) )).decode())
