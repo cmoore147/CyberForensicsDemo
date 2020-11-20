@@ -68,7 +68,8 @@ def inputController(Server):
             if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
                 return 3
             seqNum = seqNum -1
-            i = input("#### %s Chain Verified ####\n [ENTER]")
+            handlerName = Server.HandlerKeys.fromKeys(handlerKey)
+            i = input("#### Chain Verified ####\n [ENTER]" % )
         return 1
 
     if command == '2':
@@ -170,6 +171,9 @@ if __name__ == '__main__':
     serverPort = 5000
     ServerX = Server(pubKey,privKey, 0, {},"Authoritative_Server")  # temp values for keys 0 and 0 and evidence
 
+    """
+    ############# User Operation ###############
+    """
     while True:
         mode = inputController(ServerX)
         if mode == 0: ######### SendingKey ##########
@@ -183,6 +187,7 @@ if __name__ == '__main__':
 
         if mode == 1:########## Processing evidence #########
             print("###### Data is Verified #######")
+            print('PlainText Evidence: ',ServerX.Evidence)
             c = input("To Exit [PRESS ENTER]")
             sys.exit()
         if mode == 3:
@@ -194,16 +199,12 @@ if __name__ == '__main__':
                 sys.exit()
             # extracting data
 
-        if mode == 2:
-            #--------------------
+        if mode == 2: ########## Listening for Msg ##########
             msg = listen(5000,ServerX.Name)
-            #----------------------
-            #msg = "[Handler1] AES_Key 34050201030 SeqNum: 1"
-            #msg = "[handler1] Data "+ str(data)
             msgType = checkMsg(msg,ServerX)
 
             if msgType == 1:
                 print("~~~ Updated HandlerKey Library ~~~")
             if msgType == 0:
                 print("~~~~~ Recieved Evidence ~~~~~")
-                enter = input(">> Press Enter to Stop listening <<")
+                #enter = input(">> Press Enter to Stop listening <<")
