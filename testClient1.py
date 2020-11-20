@@ -136,7 +136,7 @@ def inputController(handler):
             return port,2
 
     print("[Error] Invalid command")
-    return -1
+    return -1,-1
 
 
 

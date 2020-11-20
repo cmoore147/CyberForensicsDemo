@@ -87,15 +87,14 @@ def DecryptData(cipherText,HandlerAESKey,Server):
         tempStr = tempStr[2:]
         decryptedString += tempStr
 
-    decrypted = decryptedString
     #decrypted = AES.decrypt(AESfunct, cipherText)
     #print("hex decrypted string",hex(decrypted))
-    print("hex sting of Evidence",hex(int(decrypted,16)))
-    Server.Evidence = decrypted
-    #temp = int(decrypted,2)
-    temp = binascii.unhexlify(((str('00%x' % int(Server.Evidence, 16)))))
-    print("type of this scumback motherfuckng avariable",temp)
-    print(str(int(temp,2)))
+    print("hex sting of Evidence",hex(int(decryptedString,16)))
+    temp = binascii.unhexlify(((str('00%x' % int(decryptedString, 16)))))
+
+    cunt= str(temp,'utf-8')
+    Server.Evidence = '0x'+cunt
+    print("Cunt",cunt,"ServerEvidence",Server.Evidence)
     return 0
 
 def decryptHandlerKey(eKey,Server):
