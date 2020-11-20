@@ -56,10 +56,10 @@ def inputController(Server):
             if not checkHash(EvidenceElements[0],EvidenceElements[1]):
                 #handlerX invalidated evidence
                 return 1
-            handlerName = Server.HandlerKeys[seqNum]
-            handlerKey = Server.HandlerKeys[handlerName]
+            handlerKey = Server.HandlerKeys[seqNum]
+            #handlerKey = Server.HandlerKeys[handlerName]
             if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
-                return -1
+                return 1
             seqNum = seqNum -1
         return 1
 
@@ -94,7 +94,8 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     Server.Evidence = decrypted
     #temp = int(decrypted,2)
     temp = binascii.unhexlify(((str('00%x' % int(Server.Evidence, 16)))))
-    print(str(temp))
+    print("type of this scumback motherfuckng avariable",temp)
+    print(str(int(temp,2)))
     return 0
 
 def decryptHandlerKey(eKey,Server):
@@ -147,12 +148,11 @@ def checkHash(hexData,givenHashHex):
 - appends incoming decrepyted chars to partially formed keys
 '''
 def storeKey(aesKey,handlerName,Server,handlerSeqNum):
-    print("aesKey=",aesKey)
-    print("type of key",type(aesKey))
+    print("[",handlerName,"]","aesKey=",aesKey)
     Server.HandlerKeys[handlerName] = int(aesKey,16)
-    print("Handler Key in Library",Server.HandlerKeys[handlerName])
-    Server.HandlerKeys[int(handlerSeqNum)] = handlerName
-    #print("Server Key library: ",Server.HandlerKeys)
+    Server.HandlerKeys[int(handlerSeqNum)] = int(aesKey,16)
+    print("Handler Key in Library: ",Server.HandlerKeys)
+
 
 
 def packageKey(serverKey):
@@ -190,10 +190,7 @@ if __name__ == '__main__':
                 except:
                     print("[Error] Sending Keys to Port %s" % x)
 
-        if mode == 1:
-            # inputController Calls data processing functions
-            # when program reaches here system is over
-            # actually return value could be if data is valid
+        if mode == 1:########## processing evidence #########
             c = input("Reset and try again? [PRESS ENTER]")
             if c =='':
                 evidence = ""

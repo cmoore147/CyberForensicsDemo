@@ -5,7 +5,7 @@ import binascii
 from RSA import generate_keypair,encryptRSA,decryptRSA
 from Handler import generateAESkey
 def evidence():
-    return "Unhandled:_Connor_Killed_Kivan_"
+    return "Unhandled:_C" #onnor_Killed_Kivan_"
 
 
 if __name__ == '__main__':

@@ -94,13 +94,19 @@ def inputController(handler):
             return message, 0
 
         else: #data has been handled before
+            temp10 = str(handler.Evidence)[2:]
+            data = processPlainText(temp10)
+            print("type of evidence", type(handler.Evidence))
             print("HexEncoding of Plaintext",handler.Evidence)
+            print("HexEncoding of Plaintext", data)
             newSeqNum = handler.__removeSequenceNumber__(handler.Evidence)
             print("SeqNum: %s" % newSeqNum)
-            print("type of evidence",type(handler.Evidence))
-            data = int((handler.Evidence), 16)
-            print("change in type of Evidence hex=",hex(data))
-            encryptedData = handler.__encryptAndHashReceivedData__(str(data),
+            handler.seqNum = newSeqNum
+
+            temp = int((handler.Evidence), 16)
+            print("change in type of Evidence hex=",hex(temp))
+
+            encryptedData = handler.__encryptAndHashReceivedData__(data,
                                                                    handler.secretKey)
             print("Encrypted Data: %s" % encryptedData)
             #newData = handler.__appendSequenceNumber__(newSeqNum,encryptedData)
