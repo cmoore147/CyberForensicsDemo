@@ -80,7 +80,7 @@ def inputController(handler):
 
     if command == 0:  # handle data
 
-        if True:#handler.Evidence.find("Unhandled") == 0:
+        if handler.Evidence.find("Unhandled") == 0:
             print('~~~~~~~Data~~~~~~~')
             data = processPlainText(handler.Evidence)
             print("HexEncoding of Plaintext",data)

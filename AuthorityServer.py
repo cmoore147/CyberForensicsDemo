@@ -74,10 +74,12 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     AESfunct = AES(HandlerAESKey)
 
     stringOfCipherText = str(hex(cipherText))
-    listOfBlocks = textwrap.wrap(stringOfCipherText)
+    stringOfCipherText = stringOfCipherText[2:]
+    listOfBlocks = textwrap.wrap(stringOfCipherText,32)
 
     decryptedString = "0x"
     for x in listOfBlocks:
+        print("each x= ",x)
         xHex = int(x,16)
         decryptedData = AES.decrypt(AESfunct, xHex)
         tempStr = str(hex(decryptedData))
@@ -90,7 +92,7 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     print("hex sting of Evidence",hex(int(decrypted,16)))
     Server.Evidence = decrypted
     #temp = int(decrypted,2)
-    print(binascii.unhexlify(((str('0%x' % Server.Evidence)) )).decode())
+    print(binascii.unhexlify(((str('0%x' % int(Server.Evidence,16)) )).decode()))
     return 0
 
 def decryptHandlerKey(eKey,Server):

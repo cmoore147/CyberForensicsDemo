@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b1d4664d-88de-4f1c-8924-3455dd4b141a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/AuthorityServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AuthorityServer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testClient1.py" beforeDir="false" afterPath="$PROJECT_DIR$/testClient1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +217,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605774714575</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="FINALLYWORKKS !!!!!!!!! &#10;need to fix hex string decoder to print plaintext">
+      <created>1605837529500</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1605837529500</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -235,17 +243,18 @@
     <MESSAGE value="More updates to AuthorityServer.py" />
     <MESSAGE value="Comunication works throughout system &#10;&#10;there is an error with decoding the handler key &#10;--&gt;there is an empty element in the array of encrypted chars for some reason" />
     <MESSAGE value="fixed previous error&#10;new error with the server decoding the handler key&#10;has to do with data type of the encrypted key" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed previous error&#10;new error with the server decoding the handler key&#10;has to do with data type of the encrypted key" />
+    <MESSAGE value="FINALLYWORKKS !!!!!!!!! &#10;need to fix hex string decoder to print plaintext" />
+    <option name="LAST_COMMIT_MESSAGE" value="FINALLYWORKKS !!!!!!!!! &#10;need to fix hex string decoder to print plaintext" />
   </component>
   <component name="WindowStateProjectService">
     <state x="995" y="126" width="642" height="787" key="#testClient1" timestamp="1605408741058">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="995" y="126" width="642" height="787" key="#testClient1/0.27.1920.988@0.27.1920.988" timestamp="1605408741058" />
-    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605774714298">
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605837529416">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605774714298" />
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605837529416" />
     <state width="481" height="506" key="DebuggerActiveHint" timestamp="1605570802014">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -290,10 +299,10 @@
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="449" y="155" key="SettingsEditor/0.27.1920.988@0.27.1920.988" timestamp="1605675856345" />
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605774725555">
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605837543211">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605774725555" />
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605837543211" />
     <state x="531" y="125" width="1289" height="790" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1605412530843">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -317,7 +326,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/AuthorityServer.py</url>
-          <line>103</line>
+          <line>105</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
