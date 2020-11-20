@@ -186,9 +186,9 @@ if __name__ == '__main__':
                     print("[Error] Sending Keys to Port %s" % x)
 
         if mode == 1:########## Processing evidence #########
-            print("\n##################### Data is Verified #######################")
+            print("\n##################### Original Evidence #######################")
             print("####                                                      ####")
-            print('####       PlainText Evidence: ',ServerX.Evidence,"       ####")
+            print('####                  ',ServerX.Evidence,"                             ####")
             print("####                                                      ####")
             print("##############################################################")
 
