@@ -36,18 +36,15 @@ def checkMsg(msg,handler):
         print(serverPbKey)
         e = int(serverPbKey[0])
         assert isinstance(e,int)
-
         n = int(serverPbKey[1])
         assert isinstance(n, int)
         handler.ServerPubkey = (e,n)
-
         return 0
 
     elif msgArray[1]=='Data:': # msg from a handler
         print("\n ~~~~~ Msg from %s ~~~~~" % msgArray[0])
         print("\n",msg)
         handler.Evidence = msgArray[2] #string
-
         return 1
 
     else:
@@ -64,7 +61,7 @@ def encryptAESkey(aesKey,ServerPubkey):
     for i in aesKey: # ases key is a string
         assert isinstance(i,str) ,"Aes char is not a string"
         temp = encryptRSA(ServerPubkey,i)
-        print("tempEncryptio=",temp)
+        #print("tempEncryptio=",temp)
         EncryptedKeyString += str(temp) #encryption return int
         #EncryptedArray.append(temp)
         EncryptedKeyString+=','
@@ -97,11 +94,17 @@ def inputController(handler):
             return message, 0
 
         else: #data has been handled before
+            print("HexEncoding of Plaintext",handler.Evidence)
             newSeqNum = handler.__removeSequenceNumber__(handler.Evidence)
-            encryptedData = handler.__encryptAndHashReceivedData__(handler.Evidence,
+            print("SeqNum: %s" % newSeqNum)
+            print("type of evidence",type(handler.Evidence))
+            data = int((handler.Evidence), 16)
+            print("change in type of Evidence hex=",hex(data))
+            encryptedData = handler.__encryptAndHashReceivedData__(str(data),
                                                                    handler.secretKey)
-            newData = handler.__appendSequenceNumber__(newSeqNum,
-                                                       encryptedData)
+            print("Encrypted Data: %s" % encryptedData)
+            #newData = handler.__appendSequenceNumber__(newSeqNum,encryptedData)
+            newData = encryptedData + newSeqNum
             message = ('[%s] Data: %s' % (handler.Name, newData))
             print("Message to Send: %s\n" % message)
             #theSocket.sendto(message, (SERVER_IP, PORT_NUMBER))

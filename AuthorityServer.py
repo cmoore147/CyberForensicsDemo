@@ -49,6 +49,7 @@ def inputController(Server):
     if command == '1':
         print("\n~~~~~~~ Extracting Data ~~~~~~~~~")
         seqNum = 1 #temp
+
         while seqNum > 0:
             EvidenceElements = processData(Server.Evidence)
             seqNum = EvidenceElements[2]
@@ -103,10 +104,10 @@ def decryptHandlerKey(eKey,Server):
     print(ekeyArray)
     for char in ekeyArray[:len(ekeyArray)-1]:
         assert isinstance(char,str) , "char in ecrypted array in not a string"
-        print("char =",int(char))
+        #print("char =",int(char))
         temp = decryptRSA(Server.PrivateKey, int(char))
         #assert temp == str
-        print("type of temp=",type(temp))
+        #print("type of temp=",type(temp))
         key += str(temp)
         #print("Decrypted_Char= ",str(temp))
     #print("key = ",key)
@@ -116,9 +117,9 @@ def processData(data):
     seqNum = int(data[len(data)-1])
     print("SeqNum = ",seqNum)
     givenHash = int(data[len(data)-41:len(data)-1],16) # check how long hash is
-    print("givenHash int = ",givenHash)
+    print("givenHash hex = ",hex(givenHash))
     data = int(data[:len(data)-41],16) #check how long data is
-    print("Evidence int= ",data)
+    print("Evidence hex = ",hex(data))
     return data,givenHash,seqNum
 
 def checkHash(hexData,givenHashHex):

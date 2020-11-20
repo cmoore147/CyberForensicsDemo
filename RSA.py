@@ -81,7 +81,7 @@ def encryptRSA(pk, plaintext):
     # cipher is a decimal number which is the encrypted version of plaintext
     # the pow function is much faster in calculating power compared to the ** symbol !!!
     AsciiVal = ord(plaintext)
-    print("AsciiVall %s= %d" % (plaintext,AsciiVal))
+    #print("AsciiVall %s= %d" % (plaintext,AsciiVal))
     cipher = pow(AsciiVal, pk[0], pk[1])  # encrypted letter
     return cipher
 
@@ -92,6 +92,6 @@ def decryptRSA(pk, ciphertext):
     # the returned value is a character that is the decryption of ciphertext
     AsciiVal = pow(ciphertext, pk[0], pk[1]) # decypted letter
     plain = chr(AsciiVal)
-    print("AsciiVall %s= %d"% (plain,AsciiVal))
+    #print("AsciiVall %s= %d"% (plain,AsciiVal))
     #return plain
     return plain
