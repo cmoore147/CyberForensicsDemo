@@ -5,8 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthorityServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AuthorityServer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RSA.py" beforeDir="false" afterPath="$PROJECT_DIR$/RSA.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocketFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/SocketFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testClient1.py" beforeDir="false" afterPath="$PROJECT_DIR$/testClient1.py" afterDir="false" />
     </list>
@@ -153,8 +151,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.data" />
-        <item itemvalue="Python.AuthorityServer" />
         <item itemvalue="Python.testClient1" />
+        <item itemvalue="Python.AuthorityServer" />
         <item itemvalue="Python.testClient2" />
         <item itemvalue="Python.Handler" />
       </list>
@@ -214,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605682118243</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fixed previous error&#10;new error with the server decoding the handler key&#10;has to do with data type of the encrypted key">
+      <created>1605774714575</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1605774714575</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -232,17 +237,18 @@
     <MESSAGE value="AuthorityServer.py has limited functionality&#10;- can create pub and priv keys&#10;- partial decryption of aes keys&#10;&#10;still need to implement data handling" />
     <MESSAGE value="More updates to AuthorityServer.py" />
     <MESSAGE value="Comunication works throughout system &#10;&#10;there is an error with decoding the handler key &#10;--&gt;there is an empty element in the array of encrypted chars for some reason" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comunication works throughout system &#10;&#10;there is an error with decoding the handler key &#10;--&gt;there is an empty element in the array of encrypted chars for some reason" />
+    <MESSAGE value="fixed previous error&#10;new error with the server decoding the handler key&#10;has to do with data type of the encrypted key" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed previous error&#10;new error with the server decoding the handler key&#10;has to do with data type of the encrypted key" />
   </component>
   <component name="WindowStateProjectService">
     <state x="995" y="126" width="642" height="787" key="#testClient1" timestamp="1605408741058">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="995" y="126" width="642" height="787" key="#testClient1/0.27.1920.988@0.27.1920.988" timestamp="1605408741058" />
-    <state x="499" y="57" width="777" height="847" key="CommitChangelistDialog2" timestamp="1605682118190">
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2" timestamp="1605774714298">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="499" y="57" width="777" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605682118190" />
+    <state x="499" y="57" width="912" height="847" key="CommitChangelistDialog2/0.27.1920.988@0.27.1920.988" timestamp="1605774714298" />
     <state width="481" height="506" key="DebuggerActiveHint" timestamp="1605570802014">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -251,46 +257,46 @@
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="115" y="70" width="1536" height="820" key="DiffContextDialog/0.27.1920.988@0.27.1920.988" timestamp="1605551383300" />
-    <state width="948" height="169" key="GridCell.Tab.0.bottom" timestamp="1605774337830">
+    <state width="1897" height="318" key="GridCell.Tab.0.bottom" timestamp="1605828671500">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="948" height="169" key="GridCell.Tab.0.bottom/0.27.1920.988@0.27.1920.988" timestamp="1605774337830" />
-    <state width="948" height="169" key="GridCell.Tab.0.center" timestamp="1605774337830">
+    <state width="1897" height="318" key="GridCell.Tab.0.bottom/0.27.1920.988@0.27.1920.988" timestamp="1605828671500" />
+    <state width="1897" height="318" key="GridCell.Tab.0.center" timestamp="1605828671499">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="948" height="169" key="GridCell.Tab.0.center/0.27.1920.988@0.27.1920.988" timestamp="1605774337830" />
-    <state width="948" height="169" key="GridCell.Tab.0.left" timestamp="1605774337830">
+    <state width="1897" height="318" key="GridCell.Tab.0.center/0.27.1920.988@0.27.1920.988" timestamp="1605828671499" />
+    <state width="1897" height="318" key="GridCell.Tab.0.left" timestamp="1605828671499">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="948" height="169" key="GridCell.Tab.0.left/0.27.1920.988@0.27.1920.988" timestamp="1605774337830" />
-    <state width="948" height="169" key="GridCell.Tab.0.right" timestamp="1605774337830">
+    <state width="1897" height="318" key="GridCell.Tab.0.left/0.27.1920.988@0.27.1920.988" timestamp="1605828671499" />
+    <state width="1897" height="318" key="GridCell.Tab.0.right" timestamp="1605828671500">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="948" height="169" key="GridCell.Tab.0.right/0.27.1920.988@0.27.1920.988" timestamp="1605774337830" />
-    <state width="1897" height="317" key="GridCell.Tab.1.bottom" timestamp="1605771979736">
+    <state width="1897" height="318" key="GridCell.Tab.0.right/0.27.1920.988@0.27.1920.988" timestamp="1605828671500" />
+    <state width="1897" height="317" key="GridCell.Tab.1.bottom" timestamp="1605822452127">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="317" key="GridCell.Tab.1.bottom/0.27.1920.988@0.27.1920.988" timestamp="1605771979736" />
-    <state width="1897" height="317" key="GridCell.Tab.1.center" timestamp="1605771979736">
+    <state width="1897" height="317" key="GridCell.Tab.1.bottom/0.27.1920.988@0.27.1920.988" timestamp="1605822452127" />
+    <state width="1897" height="317" key="GridCell.Tab.1.center" timestamp="1605822452127">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="317" key="GridCell.Tab.1.center/0.27.1920.988@0.27.1920.988" timestamp="1605771979736" />
-    <state width="1897" height="317" key="GridCell.Tab.1.left" timestamp="1605771979736">
+    <state width="1897" height="317" key="GridCell.Tab.1.center/0.27.1920.988@0.27.1920.988" timestamp="1605822452127" />
+    <state width="1897" height="317" key="GridCell.Tab.1.left" timestamp="1605822452127">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="317" key="GridCell.Tab.1.left/0.27.1920.988@0.27.1920.988" timestamp="1605771979736" />
-    <state width="1897" height="317" key="GridCell.Tab.1.right" timestamp="1605771979736">
+    <state width="1897" height="317" key="GridCell.Tab.1.left/0.27.1920.988@0.27.1920.988" timestamp="1605822452127" />
+    <state width="1897" height="317" key="GridCell.Tab.1.right" timestamp="1605822452127">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state width="1897" height="317" key="GridCell.Tab.1.right/0.27.1920.988@0.27.1920.988" timestamp="1605771979736" />
+    <state width="1897" height="317" key="GridCell.Tab.1.right/0.27.1920.988@0.27.1920.988" timestamp="1605822452127" />
     <state x="449" y="155" key="SettingsEditor" timestamp="1605675856345">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
     <state x="449" y="155" key="SettingsEditor/0.27.1920.988@0.27.1920.988" timestamp="1605675856345" />
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605682133441">
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1605774725555">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
-    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605682133441" />
+    <state x="770" y="256" width="800" height="528" key="Vcs.Push.Dialog.v2/0.27.1920.988@0.27.1920.988" timestamp="1605774725555" />
     <state x="531" y="125" width="1289" height="790" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1605412530843">
       <screen x="0" y="27" width="1920" height="988" />
     </state>
@@ -309,18 +315,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/testClient1.py</url>
-          <line>159</line>
+          <line>165</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/AuthorityServer.py</url>
-          <line>82</line>
+          <line>89</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/RSA.py</url>
           <line>92</line>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/testClient1.py</url>
+          <line>60</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

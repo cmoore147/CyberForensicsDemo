@@ -35,7 +35,10 @@ def checkMsg(msg,handler):
         serverPbKey = msgArray[2].split(',')
         print(serverPbKey)
         e = int(serverPbKey[0])
+        assert isinstance(e,int)
+
         n = int(serverPbKey[1])
+        assert isinstance(n, int)
         handler.ServerPubkey = (e,n)
 
         return 0
@@ -59,7 +62,7 @@ def encryptAESkey(aesKey,ServerPubkey):
     EncryptedKeyString = ''
     #EncrypedKeyArray = []
     for i in aesKey: # ases key is a string
-        assert i == str ,"Aes char is not a string"
+        assert isinstance(i,str) ,"Aes char is not a string"
         temp = encryptRSA(ServerPubkey,i)
         print("tempEncryptio=",temp)
         EncryptedKeyString += str(temp) #encryption return int
@@ -77,9 +80,11 @@ def inputController(handler):
 
     if command == 0:  # handle data
 
-        if handler.Evidence.find("Unhandled") == 0:
+        if True:#handler.Evidence.find("Unhandled") == 0:
             print('~~~~~~~Data~~~~~~~')
             data = processPlainText(handler.Evidence)
+            print("HexEncoding of Plaintext",data)
+            #cast key to string
             encryptedData = handler.__encryptAndHashReceivedData__(data,handler.secretKey)
             print("Encrypted Data: %s" % encryptedData)
             encryptedData += "0"
@@ -92,11 +97,11 @@ def inputController(handler):
             return message, 0
 
         else: #data has been handled before
-            excryptedData = handler.__encryptAndHashReceivedData__(handler.Evidence,
+            encryptedData = handler.__encryptAndHashReceivedData__(handler.Evidence,
                                                                    handler.secretKey)
-            newSeqNum = handler.__removeSequenceNumber__(encryptTheData)
+            newSeqNum = handler.__removeSequenceNumber__(encryptedData)
             newData = handler.__appendSequenceNumber__(newSeqNum,
-                                                       encryptTheData)
+                                                       encryptedData)
             message = ('[%s] Data: %s' % (handler.Name, newData))
             print("Message to Send: %s\n" % message)
             #theSocket.sendto(message, (SERVER_IP, PORT_NUMBER))
@@ -108,7 +113,8 @@ def inputController(handler):
     if command == 1:  # send key to authoritative Server and exit
         print("\n  ~~~~~~ My Secret Key ~~~~~~~  \n key: %s" % handler.secretKey)
         print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        EncryptedKeyString = encryptAESkey(handler.secretKey,ServerPubKey)
+        AesKey = str(hex(handler.secretKey))
+        EncryptedKeyString = encryptAESkey(AesKey,handler.ServerPubkey)
         print(EncryptedKeyString)
         message = ('[%s] AES_Key: %s' % (handler.Name, EncryptedKeyString))
         return message, 1
@@ -134,7 +140,7 @@ if __name__ == '__main__':
     '''
     p = 1297211 # for testing
     q = 1297601 # for testing
-    key = str(hex(generateAESkey()))
+    key = generateAESkey()
     ServerPubKey,pvk = generate_keypair(p,q) # for testing
     handlerName = str(input("Whats ur name?"))
     #print("handlerkey",str(hex(key)))

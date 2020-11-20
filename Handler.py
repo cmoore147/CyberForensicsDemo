@@ -10,6 +10,7 @@ def calculateAndAppendHash(data):
     hashValue = digest_hash(data)
     stringData = str(hex(data))
     stringHash = str(hex(int.from_bytes(hashValue, "big")))
+    print("Actual Hash ", stringHash)
     stringTotal = stringData + stringHash[2:]
     outData = hex(int(stringTotal, 16))
     return outData

@@ -1,7 +1,8 @@
 from RSA import  generate_keypair,encryptRSA,decryptRSA
 import hashFunction
 from SocketFunctions import listen,send
-
+from aes import AES
+import binascii
 menu = "\n|=======Menu==========|\n" \
        "| 0) Send Keys        |\n" \
        "| 1) Process Evidence |\n" \
@@ -47,15 +48,17 @@ def inputController(Server):
     if command == '1':
         print("\n~~~~~~~ Extracting Data ~~~~~~~~~")
         seqNum = 1 #temp
-        while seqNum > 0:
+        while int(seqNum) > 0:
             EvidenceElements = processData(Server.Evidence)
             seqNum = EvidenceElements[2]
             if not checkHash(EvidenceElements[0],EvidenceElements[1]):
                 #handlerX invalidated evidence
                 return 1
-            handlerkey = determindHander()
-            if DecryptData(EvidenceElements[0],handler,Server) == -1:
+            handlerName = Server.HandlerKeys[seqNum]
+            handlerKey = Server.HandlerKeys[handlerName]
+            if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
                 return -1
+            seqNum = seqNum -1
         return 0
 
     if command == '2':
@@ -68,8 +71,12 @@ def inputController(Server):
 
 def DecryptData(cipherText,HandlerAESKey,Server):
     AESfunct = AES(HandlerAESKey)
-    decrypted = AES.decrypt(AESfunct, ciphertext)
+    decrypted = AES.decrypt(AESfunct, cipherText)
+    #print("hex decrypted string",hex(decrypted))
+    print("hex sting of Evidence",hex(decrypted))
     Server.Evidence = decrypted
+    #temp = int(decrypted,2)
+    print(binascii.unhexlify(((str('0%x' % Server.Evidence)) )).decode())
     return 0
 
 def decryptHandlerKey(eKey,Server):
@@ -78,30 +85,37 @@ def decryptHandlerKey(eKey,Server):
     print("Server Key: ",Server.PrivateKey)
     print(ekeyArray)
     for char in ekeyArray[:len(ekeyArray)-1]:
-        assert char == str , "char in ecrypted array in not a string"
+        assert isinstance(char,str) , "char in ecrypted array in not a string"
         print("char =",int(char))
         temp = decryptRSA(Server.PrivateKey, int(char))
         #assert temp == str
         print("type of temp=",type(temp))
-        key.join(str(temp))
+        key += str(temp)
         #print("Decrypted_Char= ",str(temp))
     #print("key = ",key)
     return key
 
 def processData(data):
     seqNum = data[len(data)-1]
-    givenHash = data[len(data)-40:len(data)-1] # check how long hash is
-    data = data[:len(data)-4] #check how long data is
+    print("SeqNum = ",seqNum)
+    givenHash = int(data[len(data)-41:len(data)-1],16) # check how long hash is
+    print("givenHash int = ",givenHash)
+    data = int(data[:len(data)-41],16) #check how long data is
+    print("Evidence int= ",data)
     return data,givenHash,seqNum
 
-def checkHash(data,hash):
-    checkH = hashFunction.digest_hash(data)
-    checkH = str(hex(int.from_bytes(hashValue,"big")))
-    hash = hex(str())
-    print('CheckHash: %s\n'
-          'Given Hash: %s' % (checkH,hash))
+def checkHash(hexData,givenHashHex):
+    #print("type of data",type(data))
+    #hexData = int(data, 16)
+    print("hex Evidence= ",hex(hexData))
+    #givenHashHex = int(hash,16)
+    #print("type of hash ",type(hexData))
+    checkH = hashFunction.digest_hash(hexData)
+    checkHashHex = int.from_bytes(checkH, "big")
+    print('CheckHash_hex: %s\n'
+          'Given Hash_hex: %s' % (hex(checkHashHex),hex(givenHashHex)))
 
-    if checkH == data:
+    if checkHashHex == givenHashHex:
         print(">>Hash valid<<")
         return True
     else:
@@ -114,8 +128,11 @@ def checkHash(data,hash):
 - intialized handler keys 
 - appends incoming decrepyted chars to partially formed keys
 '''
-def storeKey(aesKeyChar,handlerName,Server,handlerSeqNum):
-    Server.HandlerKeys[handlerName] = aesKeyChar
+def storeKey(aesKey,handlerName,Server,handlerSeqNum):
+    print("aesKey=",aesKey)
+    print("type of key",type(aesKey))
+    Server.HandlerKeys[handlerName] = int(aesKey,16)
+    print("Handler Key in Library",Server.HandlerKeys[handlerName])
     Server.HandlerKeys[handlerSeqNum] = handlerName
     #print("Server Key library: ",Server.HandlerKeys)
 
@@ -136,7 +153,7 @@ if __name__ == '__main__':
     """
     ############# Server Setup ################
     """
-    q = 7
+    q = 61
     p = 31
     pubKey, privKey = generate_keypair(p, q)
     print('Private: %s' % (privKey,))
