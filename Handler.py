@@ -5,35 +5,40 @@ from hashFunction import digest_hash
 import binascii
 
 
-
 def calculateAndAppendHash(data):
     hashValue = digest_hash(data)
     stringData = str(hex(data))
     stringHash = str(hex(int.from_bytes(hashValue, "big")))
-    print("Actual Hash ", stringHash)
+    print("Newly Encrypted Data: ", stringData)
+    print("Newly Calculated Hash: ", stringHash)
     stringTotal = stringData + stringHash[2:]
     outData = hex(int(stringTotal, 16))
     return outData
 
+'''
+Returns an array of encryped chars  that make up the AES key
+'''
+def encryptAESkey(aesKey,ServerPubkey):
+    EncryptedKeyString = ''
+    #EncrypedKeyArray = []
+    for i in aesKey: # ases key is a string
+        assert isinstance(i,str) ,"Aes char is not a string"
+        temp = encryptRSA(ServerPubkey,i)
+        #print("tempEncryptio=",temp)
+        EncryptedKeyString += str(temp) #encryption return int
+        #EncryptedArray.append(temp)
+        EncryptedKeyString+=','
+    return EncryptedKeyString
 
 def encrypt_data(plaintext, master_key):
     AESfunct = AES(master_key)
     encrypted = AES.encrypt(AESfunct, plaintext)
     return encrypted
 
-
 def decrypt_data(ciphertext, master_key):
     AESfunct = AES(master_key)
     decrypted = AES.decrypt(AESfunct, ciphertext)
     return decrypted
-
-
-def getSeqNum(data):
-    return int(data[len(data) - 1], 16)
-
-
-def incrementSeqNum(seq):
-    return seq + 1
 
 def processPlainText(plainText):
     data = binascii.hexlify(plainText.encode())
@@ -45,7 +50,7 @@ def generateAESkey():
             0xCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDD,
             0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF]
     secretKey = keys[random.randrange(0,4)]
-    print(keys)
+    #print(keys)
     return secretKey
 
 class Handler:
@@ -86,10 +91,8 @@ class Handler:
         data = data + newSequenceNumStr
         return data
 
-
-
-
 if __name__ == '__main__':
+    '''
     key = 0x2b7e151628aed2a6abf7158809cf4f3c  # handlerPrivate AES key
     plaintext = 0x1111113243f6a8885a308d313198a2e03707343243f6a8885a308d313198a2e
     #print(sizeof(plaintext))
@@ -107,3 +110,4 @@ if __name__ == '__main__':
     # recieve(data)
     # --------decrypt testing------
     # getSeqNumber
+    '''

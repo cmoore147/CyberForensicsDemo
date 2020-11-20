@@ -4,10 +4,12 @@ from SocketFunctions import listen,send
 from aes import AES
 import binascii
 import textwrap
+import sys
+
 menu = "\n|=======Menu==========|\n" \
        "| 0) Send Keys        |\n" \
        "| 1) Process Evidence |\n" \
-       "| 2) Listen for Data  |\n" \
+       "| 2) Listen for Msg   |\n" \
        "|=====================|\n"
 portArray = [3000,4000,5000]
 
@@ -38,7 +40,7 @@ def checkMsg(msg,Server):
 
 def inputController(Server):
     print(menu)
-    command = input(">> ")
+    command = input('[%s]>> ' % Server.Name)
     command.join('\n')
 
     if command == '0':
@@ -52,14 +54,19 @@ def inputController(Server):
 
         while seqNum > 0:
             EvidenceElements = processData(Server.Evidence)
+            print("~[Evidence Elements]~\n"
+                  "Data: %s\n"
+                  "Hash: %s\n"
+                  "SeqNum: %s\n"(hex(EvidenceElements[0]),
+                                 hex(EvidenceElements[1]),
+                                 EvidenceElements[2]))
+
             seqNum = EvidenceElements[2]
             if not checkHash(EvidenceElements[0],EvidenceElements[1]):
-                #handlerX invalidated evidence
-                return 1
+                return 3
             handlerKey = Server.HandlerKeys[seqNum]
-            #handlerKey = Server.HandlerKeys[handlerName]
             if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
-                return 1
+                return 3
             seqNum = seqNum -1
         return 1
 
@@ -80,61 +87,45 @@ def DecryptData(cipherText,HandlerAESKey,Server):
 
     decryptedString = "0x"
     for x in listOfBlocks:
-        print("each x= ",x)
+        #print("each x= ",x)
         xHex = int(x,16)
         decryptedData = AES.decrypt(AESfunct, xHex)
         tempStr = str(hex(decryptedData))
         tempStr = tempStr[2:]
         decryptedString += tempStr
 
-    #decrypted = AES.decrypt(AESfunct, cipherText)
-    #print("hex decrypted string",hex(decrypted))
-    print("hex sting of Evidence",hex(int(decryptedString,16)))
     temp = binascii.unhexlify(((str('%00x' % int(decryptedString, 16)))))
-
-    cunt= str(temp,'utf-8')[:]
-    Server.Evidence = cunt
-    print("Cunt",cunt,"ServerEvidence",Server.Evidence)
+    tempDecoded = str(temp,'utf-8')[:]
+    Server.Evidence = tempDecoded
     return 0
 
 def decryptHandlerKey(eKey,Server):
     ekeyArray = eKey.split(',')
     key = ''
-    print("Server Key: ",Server.PrivateKey)
+    print("Server Pubkey: ",Server.PrivateKey)
     print(ekeyArray)
     for char in ekeyArray[:len(ekeyArray)-1]:
         assert isinstance(char,str) , "char in ecrypted array in not a string"
-        #print("char =",int(char))
         temp = decryptRSA(Server.PrivateKey, int(char))
-        #assert temp == str
-        #print("type of temp=",type(temp))
         key += str(temp)
-        #print("Decrypted_Char= ",str(temp))
-    #print("key = ",key)
+
     return key
 
 def processData(data):
     seqNum = int(data[len(data)-1])
-    print("SeqNum = ",seqNum)
-    givenHash = int(data[len(data)-41:len(data)-1],16) # check how long hash is
-    print("givenHash hex = ",hex(givenHash))
-    data = int(data[:len(data)-41],16) #check how long data is
-    print("Evidence hex = ",hex(data))
+    givenHash = int(data[len(data)-41:len(data)-1],16)
+    data = int(data[:len(data)-41],16)
     return data,givenHash,seqNum
 
 def checkHash(hexData,givenHashHex):
-    #print("type of data",type(data))
-    #hexData = int(data, 16)
-    print("hex Evidence= ",hex(hexData))
-    #givenHashHex = int(hash,16)
-    #print("type of hash ",type(hexData))
     checkH = hashFunction.digest_hash(hexData)
     checkHashHex = int.from_bytes(checkH, "big")
-    print('CheckHash_hex: %s\n'
+    print("\n~~~~ Examine Hash ~~~~")
+    print('Check Hash_hex: %s\n'
           'Given Hash_hex: %s' % (hex(checkHashHex),hex(givenHashHex)))
 
     if checkHashHex == givenHashHex:
-        print(">>Hash valid<<")
+        print(">>HASH VALID<<")
         return True
     else:
         print(">>Hash Invalid<<")
@@ -144,13 +135,12 @@ def checkHash(hexData,givenHashHex):
 '''
 # Manages creation of HandlerKeys data structure #
 - intialized handler keys 
-- appends incoming decrepyted chars to partially formed keys
 '''
 def storeKey(aesKey,handlerName,Server,handlerSeqNum):
-    print("[",handlerName,"]","aesKey=",aesKey)
+    #print("[",handlerName,"]","aesKey=",aesKey)
     Server.HandlerKeys[handlerName] = int(aesKey,16)
     Server.HandlerKeys[int(handlerSeqNum)] = int(aesKey,16)
-    print("Handler Key in Library: ",Server.HandlerKeys)
+    print("Updated Handler Key Library: ",Server.HandlerKeys)
 
 
 
@@ -158,15 +148,14 @@ def packageKey(serverKey):
     return str(ServerX.PublicKey[0]) + ',' + str(ServerX.PublicKey[1])
 
 class Server():
-    def __init__(self,PublicKey,PrivateKey,Evidence,HandlerKeys):
+    def __init__(self,PublicKey,PrivateKey,Evidence,HandlerKeys,Name):
         self.PublicKey = PublicKey
         self.PrivateKey = PrivateKey
         self.Evidence = Evidence
         self.HandlerKeys = HandlerKeys
+        self.Name = Name
 
 if __name__ == '__main__':
-    #key = 0x2b7e151628aed2a6abf7158809cf4f3c
-    #data = 0x1111113243f6a8885a308d313198a2e03707343243f6a8885a308d313198a2e
     """
     ############# Server Setup ################
     """
@@ -176,7 +165,7 @@ if __name__ == '__main__':
     print('Private: %s' % (privKey,))
     print('Public: %s' % (pubKey,))
     serverPort = 5000
-    ServerX = Server(pubKey,privKey, 0, {})  # temp values for keys 0 and 0 and evidence
+    ServerX = Server(pubKey,privKey, 0, {},"Authoritative_Server")  # temp values for keys 0 and 0 and evidence
 
     while True:
         mode = inputController(ServerX)
@@ -189,9 +178,13 @@ if __name__ == '__main__':
                 except:
                     print("[Error] Sending Keys to Port %s" % x)
 
-        if mode == 1:########## processing evidence #########
+        if mode == 1:########## Processing evidence #########
+            print("###### Data is Verified #######")
+            c = input("To Exit [PRESS ENTER]")
+            sys.exit()
+        if mode == 3:
             c = input("Reset and try again? [PRESS ENTER]")
-            if c =='':
+            if c == '':
                 evidence = ""
                 pass
             else:

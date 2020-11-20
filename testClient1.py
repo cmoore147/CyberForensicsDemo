@@ -51,22 +51,6 @@ def checkMsg(msg,handler):
         print("\nError with Msg format")
         return -1
 
-
-'''
-Returns an array of encryped chars  that make up the AES key
-'''
-def encryptAESkey(aesKey,ServerPubkey):
-    EncryptedKeyString = ''
-    #EncrypedKeyArray = []
-    for i in aesKey: # ases key is a string
-        assert isinstance(i,str) ,"Aes char is not a string"
-        temp = encryptRSA(ServerPubkey,i)
-        #print("tempEncryptio=",temp)
-        EncryptedKeyString += str(temp) #encryption return int
-        #EncryptedArray.append(temp)
-        EncryptedKeyString+=','
-    return EncryptedKeyString
-
 '''
 # handled the commands from the user
 '''
@@ -78,42 +62,42 @@ def inputController(handler):
     if command == 0:  # handle data
 
         if handler.Evidence.find("Unhandled") == 0:
-            print('~~~~~~~Data~~~~~~~')
+            print('~~~~~~~Handling Raw Evidence~~~~~~~')
+            print('Raw Evidence: ',handler.Evidence)
             data = processPlainText(handler.Evidence)
-            print("HexEncoding of Plaintext",data)
-            #cast key to string
+            print("Plaintext (Hex): ",data)
+
             encryptedData = handler.__encryptAndHashReceivedData__(data,handler.secretKey)
-            print("Encrypted Data: %s" % encryptedData)
+
             encryptedData += "0"
             newSeqNum = handler.__removeSequenceNumber__(encryptedData)
             handler.seqNum = newSeqNum
             print("SeqNum: %s" % newSeqNum)
+
             newData = handler.__appendSequenceNumber__(newSeqNum, encryptedData)
             message = ('[%s] Data: %s' % ( handler.Name,newData))
-            print("Message to Send: %s\n" % message)
+            print("\nMessage to Send: %s\n" % message)
             return message, 0
 
-        else: #data has been handled before
-            temp10 = str(handler.Evidence)[2:]
-            data = processPlainText(temp10)
-            print("type of evidence", type(handler.Evidence))
-            print("HexEncoding of Plaintext",handler.Evidence)
-            print("HexEncoding of Plaintext", data)
+        else: ########## Data has been handled before ##########
+            temp = str(handler.Evidence)[2:]
+            data = processPlainText(temp)
+            print("Encrypted Evidence (Hex):  ", data)
+
             newSeqNum = handler.__removeSequenceNumber__(handler.Evidence)
             print("SeqNum: %s" % newSeqNum)
             handler.seqNum = newSeqNum
 
-            temp = int((handler.Evidence), 16)
-            print("change in type of Evidence hex=",hex(temp))
+            #temp = int((handler.Evidence), 16)
+            #print("change in type of Evidence hex=",hex(temp))
 
             encryptedData = handler.__encryptAndHashReceivedData__(data,
                                                                    handler.secretKey)
-            print("Encrypted Data: %s" % encryptedData)
+            print("Newly Encrypted Evidence: %s" % encryptedData)
             #newData = handler.__appendSequenceNumber__(newSeqNum,encryptedData)
             newData = encryptedData + newSeqNum
             message = ('[%s] Data: %s' % (handler.Name, newData))
             print("Message to Send: %s\n" % message)
-            #theSocket.sendto(message, (SERVER_IP, PORT_NUMBER))
             return message,0
 
     '''
@@ -139,22 +123,18 @@ def inputController(handler):
     return -1,-1
 
 
-
-
 if __name__ == '__main__':
-
-    print(splash)
     '''
     ########### Handler Setup ##########
     '''
-    p = 1297211 # for testing
-    q = 1297601 # for testing
     key = generateAESkey()
-    ServerPubKey,pvk = generate_keypair(p,q) # for testing
-    handlerName = str(input("Whats ur name?"))
-    #print("handlerkey",str(hex(key)))
+    handlerName = str(input("Enter HandlerName =\n"
+                            ">> "))
+    print()
+    print("Created New Handler [%s]" % handlerName)
     HandlerX = Handler(key,handlerName,0,"",0)
     HandlerX.Evidence = evidence()
+    print("Secret key=", str(hex(key)))
     serverPort = 5000
     '''
     ########### User Operation ##########
@@ -188,7 +168,7 @@ if __name__ == '__main__':
                 #msg = (message + EncrypedKeyString)
                 msg += ' SeqNum: ' + str(HandlerX.seqNum)
                 try:
-                    send(serverPort,msg)
+                    send(serverPort,msg,HandlerX.Name)
                 except:
                     print("Error writting to socket")
 
@@ -200,7 +180,7 @@ if __name__ == '__main__':
             # print(portlist)
             # port = input("\n>> Choose a port<<\n")
             port = mode[0]
-            msg = listen(port)
+            msg = listen(port,HandlerX.Name)
             msgType = checkMsg(msg,HandlerX)
             if msgType == 0:
                 print("~~~~ Received Server Key ~~~~~")
