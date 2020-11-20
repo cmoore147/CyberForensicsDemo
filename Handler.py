@@ -58,17 +58,13 @@ class Handler:
 
     def __encryptAndHashReceivedData__(self, plaintext,secretKey):
         plaintextStr = plaintext#str(hex(plaintext))
-        #plaintextStr = plaintextStr
         listOfBlocks = textwrap.wrap(plaintextStr, 32)
-        #print(listOfBlocks)
 
         # Iterate through list of blocks and exncrypt each block and concatenate into full enxrypted string
         encryptedString = "0x"
         for x in listOfBlocks:
-            #print(x)
             xHex = int(x, 16)
             encryptedData = encrypt_data(xHex, secretKey)
-            #print("Encrypted data: " + str(hex(encryptedData)))
             tempStr = str(hex(encryptedData))
             tempStr = tempStr[2:]
             encryptedString += tempStr

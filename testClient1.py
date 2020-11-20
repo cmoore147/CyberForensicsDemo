@@ -97,9 +97,9 @@ def inputController(handler):
             return message, 0
 
         else: #data has been handled before
+            newSeqNum = handler.__removeSequenceNumber__(handler.Evidence)
             encryptedData = handler.__encryptAndHashReceivedData__(handler.Evidence,
                                                                    handler.secretKey)
-            newSeqNum = handler.__removeSequenceNumber__(encryptedData)
             newData = handler.__appendSequenceNumber__(newSeqNum,
                                                        encryptedData)
             message = ('[%s] Data: %s' % (handler.Name, newData))

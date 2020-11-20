@@ -49,7 +49,7 @@ def inputController(Server):
     if command == '1':
         print("\n~~~~~~~ Extracting Data ~~~~~~~~~")
         seqNum = 1 #temp
-        while int(seqNum) > 0:
+        while seqNum > 0:
             EvidenceElements = processData(Server.Evidence)
             seqNum = EvidenceElements[2]
             if not checkHash(EvidenceElements[0],EvidenceElements[1]):
@@ -60,7 +60,7 @@ def inputController(Server):
             if DecryptData(EvidenceElements[0],handlerKey,Server) == -1:
                 return -1
             seqNum = seqNum -1
-        return 0
+        return 1
 
     if command == '2':
         print("\n ~~~~~~~ Listening for Message ~~~~~~")
@@ -92,7 +92,8 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     print("hex sting of Evidence",hex(int(decrypted,16)))
     Server.Evidence = decrypted
     #temp = int(decrypted,2)
-    print(binascii.unhexlify(((str('0%x' % int(Server.Evidence,16)) )).decode()))
+    temp = binascii.unhexlify(((str('00%x' % int(Server.Evidence, 16)))))
+    print(str(temp))
     return 0
 
 def decryptHandlerKey(eKey,Server):
@@ -112,7 +113,7 @@ def decryptHandlerKey(eKey,Server):
     return key
 
 def processData(data):
-    seqNum = data[len(data)-1]
+    seqNum = int(data[len(data)-1])
     print("SeqNum = ",seqNum)
     givenHash = int(data[len(data)-41:len(data)-1],16) # check how long hash is
     print("givenHash int = ",givenHash)
@@ -149,7 +150,7 @@ def storeKey(aesKey,handlerName,Server,handlerSeqNum):
     print("type of key",type(aesKey))
     Server.HandlerKeys[handlerName] = int(aesKey,16)
     print("Handler Key in Library",Server.HandlerKeys[handlerName])
-    Server.HandlerKeys[handlerSeqNum] = handlerName
+    Server.HandlerKeys[int(handlerSeqNum)] = handlerName
     #print("Server Key library: ",Server.HandlerKeys)
 
 
@@ -165,7 +166,7 @@ class Server():
 
 if __name__ == '__main__':
     #key = 0x2b7e151628aed2a6abf7158809cf4f3c
-    data = 0x1111113243f6a8885a308d313198a2e03707343243f6a8885a308d313198a2e
+    #data = 0x1111113243f6a8885a308d313198a2e03707343243f6a8885a308d313198a2e
     """
     ############# Server Setup ################
     """
@@ -175,7 +176,7 @@ if __name__ == '__main__':
     print('Private: %s' % (privKey,))
     print('Public: %s' % (pubKey,))
     serverPort = 5000
-    ServerX = Server(pubKey,privKey, data, {})  # temp values for keys 0 and 0 and evidence
+    ServerX = Server(pubKey,privKey, 0, {})  # temp values for keys 0 and 0 and evidence
 
     while True:
         mode = inputController(ServerX)
