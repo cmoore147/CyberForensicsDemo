@@ -90,10 +90,10 @@ def DecryptData(cipherText,HandlerAESKey,Server):
     #decrypted = AES.decrypt(AESfunct, cipherText)
     #print("hex decrypted string",hex(decrypted))
     print("hex sting of Evidence",hex(int(decryptedString,16)))
-    temp = binascii.unhexlify(((str('00%x' % int(decryptedString, 16)))))
+    temp = binascii.unhexlify(((str('%00x' % int(decryptedString, 16)))))
 
-    cunt= str(temp,'utf-8')
-    Server.Evidence = '0x'+cunt
+    cunt= str(temp,'utf-8')[:]
+    Server.Evidence = cunt
     print("Cunt",cunt,"ServerEvidence",Server.Evidence)
     return 0
 
